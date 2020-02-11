@@ -6,7 +6,7 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import SearchScreen from '../screens/SearchScreen';
-import LinksScreen from '../screens/LinksScreen';
+import BarcodeScanner from '../screens/BarcodeScanner';
 import SettingsScreen from '../screens/SettingsScreen';
 
 const config = Platform.select({
@@ -40,6 +40,7 @@ HomeStack.path = '';
 const LinksStack = createStackNavigator(
   {
     Links: SearchScreen,
+    BarcodeScanner: BarcodeScanner
   },
   config
 );

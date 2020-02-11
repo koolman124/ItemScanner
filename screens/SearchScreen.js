@@ -21,7 +21,7 @@ export default class SearchScreen extends React.Component {
 
                 <Text>Or</Text> 
 
-                <Button style={styles.button} icon="camera" mode="outlined" onPress={() => console.log('Pressed')}>
+                <Button style={styles.button} icon="camera" mode="outlined" onPress={() => {this.props.navigation.navigate("BarcodeScanner");}}>
                     Scan
                 </Button>
             </View>
@@ -30,6 +30,10 @@ export default class SearchScreen extends React.Component {
     );
   }
 }
+
+// SearchScreen.navigationOptions = {
+//   header: null,
+// };
 
 const styles = StyleSheet.create({
     search_container: {
