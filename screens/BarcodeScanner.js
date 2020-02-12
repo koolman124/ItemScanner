@@ -8,7 +8,9 @@ import { BarCodeScanner } from "expo-barcode-scanner";
 export default class BarcodeScanner extends React.Component {
   state = {
     hasCameraPermission: null,
-    scanned: false
+    scanned: false,
+    productName: null,
+    productImage: null
   };
 
   async componentDidMount() {
@@ -22,8 +24,16 @@ export default class BarcodeScanner extends React.Component {
 
   scanThroughAPIs(data) {
     this.getProductFromTargetAPI(data);
-    this.getProductFromWalmartAPI(data);
-  }
+    // this.getProductFromWalmartAPI(data);
+    // console.log(this.state.productName);
+    // console.log(this.state.productImage);
+    if (this.state.productName != null && this.state.productImage != null){
+        this.props.navigation.navigate("Product", {
+        productName: this.state.productName,
+        productImage: this.state.productImage
+      });
+    }
+  } 
 
   getProductFromTargetAPI(data) {
     return fetch("https://redsky.target.com/v4/products/pdp/BARCODE/".concat(data).concat("/3284?key=3f015bca9bce7dbb2b377638fa5de0f229713c78&pricing_context=digital&pricing_store_id=3284"), {
@@ -38,14 +48,24 @@ export default class BarcodeScanner extends React.Component {
       })
         .then(response => response.json())
         .then(responseJson => {
-          console.log(responseJson);
+          // console.log(responseJson);
           if(responseJson.message == "no products found")
           {
             console.log('cant find in target')
           }
           else
           { 
-            console.log(responseJson.products)
+            // console.log(responseJson.products)
+            if (!this.state.productName){
+              this.setState({productName: responseJson.products[0].title});
+              console.log(responseJson.products[0].title);
+            }
+            if (!this.state.productImage){
+              this.setState({productImage: responseJson.products[0].images.primaryUri});
+              console.log(responseJson.products[0].images.primaryUri);
+            }
+            // console.log(responseJson.products[0].title)
+            // console.log(responseJson.products[0].images.primaryUri)
           }
         //   this.props.navigation.navigate("Products", {
         //     product_array: responseJson.products
@@ -76,8 +96,14 @@ export default class BarcodeScanner extends React.Component {
           }
           else
           {
-            console.log(responseJson.data.common.name)
-            console.log(responseJson.data.common.productImageUrl)
+            // console.log(responseJson.data.common.name)
+            if (this.state.productName != null){
+              this.setState({productName: responseJson.data.common.name})
+            }
+            if (this.state.productImage != null){
+              this.setState({productImage: responseJson.data.common.productImageUrl})
+            }
+            // console.log(responseJson.data.common.productImageUrl)
           }
         //   this.props.navigation.navigate("Products", {
         //     product_array: responseJson.products
