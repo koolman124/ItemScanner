@@ -23,19 +23,19 @@ export default class BarcodeScanner extends React.Component {
   };
 
   scanThroughAPIs(data) {
-    this.getProductFromTargetAPI(data);
-    // this.getProductFromWalmartAPI(data);
-    // console.log(this.state.productName);
-    // console.log(this.state.productImage);
-    if (this.state.productName != null && this.state.productImage != null){
-        this.props.navigation.navigate("Product", {
-        productName: this.state.productName,
-        productImage: this.state.productImage
-      });
-    }
+    var JsonData = {};
+    this.getProductFromTargetAPI(data, JsonData);
+    this.getProductFromWalmartAPI(data, JsonData);
+    console.log(JsonData);
+    // if (this.state.productName != null && this.state.productImage != null){
+    //     this.props.navigation.navigate("Product", {
+    //     productName: this.state.productName,
+    //     productImage: this.state.productImage
+    //   });
+    // }
   } 
 
-  getProductFromTargetAPI(data) {
+  getProductFromTargetAPI(data, JsonData) {
     return fetch("https://redsky.target.com/v4/products/pdp/BARCODE/".concat(data).concat("/3284?key=3f015bca9bce7dbb2b377638fa5de0f229713c78&pricing_context=digital&pricing_store_id=3284"), {
         method: "GET",
         headers: {
@@ -55,21 +55,21 @@ export default class BarcodeScanner extends React.Component {
           }
           else
           { 
-            // console.log(responseJson.products)
-            if (!this.state.productName){
-              this.setState({productName: responseJson.products[0].title});
-              console.log(responseJson.products[0].title);
+            if (!JsonData['Product_Name']){
+              JsonData['Product_Name'] = responseJson.products[0].title;
             }
-            if (!this.state.productImage){
-              this.setState({productImage: responseJson.products[0].images.primaryUri});
-              console.log(responseJson.products[0].images.primaryUri);
+            if (!JsonData['Product_Image']){
+              JsonData['Product_Image'] = responseJson.products[0].images.primaryUri;
             }
+            if (!JsonData['Target_Product_Link']){
+              JsonData['Target_Product_Link'] = responseJson.products[0].targetDotComUri;
+            }
+            console.log("After Target:");
+            console.log(JsonData);
+            return JsonData;
             // console.log(responseJson.products[0].title)
             // console.log(responseJson.products[0].images.primaryUri)
           }
-        //   this.props.navigation.navigate("Products", {
-        //     product_array: responseJson.products
-        //   });
         })
         .catch(error => {
           console.log("Error finding");
@@ -77,7 +77,7 @@ export default class BarcodeScanner extends React.Component {
         });
   }
 
-  getProductFromWalmartAPI(data) {
+  getProductFromWalmartAPI(data, JsonData) {
     return fetch("https://search.mobile.walmart.com/v1/products-by-code/UPC/".concat(data).concat("?storeId=3520"), {
         method: "GET",
         headers: {
@@ -96,18 +96,19 @@ export default class BarcodeScanner extends React.Component {
           }
           else
           {
-            // console.log(responseJson.data.common.name)
-            if (this.state.productName != null){
-              this.setState({productName: responseJson.data.common.name})
+            if (!JsonData['Product_Name']){
+              JsonData['Product_Name'] = responseJson.data.common.name;
             }
-            if (this.state.productImage != null){
-              this.setState({productImage: responseJson.data.common.productImageUrl})
+            if (!JsonData['Product_Image']){
+              JsonData['Product_Image'] = responseJson.data.common.productImageUrl;
             }
-            // console.log(responseJson.data.common.productImageUrl)
+            if (!JsonData['Walmart_Product_Link']){
+              JsonData['Walmart_Product_Link'] = responseJson.data.common.productUrl;
+            }
+            console.log("After Walmart:");
+            console.log(JsonData);
+            return JsonData;
           }
-        //   this.props.navigation.navigate("Products", {
-        //     product_array: responseJson.products
-        //   });
         })
         .catch(error => {
           console.log("Error finding");
@@ -151,7 +152,6 @@ export default class BarcodeScanner extends React.Component {
     this.setState({ scanned: true });
     // console.log(data)
     // console.log(parseInt(data, 10))
-    // this.getProductFromTargetAPI(parseInt(data, 10));
     this.scanThroughAPIs(data);
   };
 }
