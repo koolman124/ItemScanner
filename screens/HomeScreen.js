@@ -19,10 +19,10 @@ export default class HomeScreen extends Component {
             </Text>
 
             <TouchableOpacity style={styles.buttonContainer}>
-              <Text>Option 1</Text>
+              <Text>Search</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.buttonContainer}>
-              <Text>Option 2</Text>
+              <Text>Scan</Text>
             </TouchableOpacity>
           </View>
         </View>
