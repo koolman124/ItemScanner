@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import {StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 
 export default class HomeScreen extends Component {
   render() {
@@ -18,29 +18,32 @@ export default class HomeScreen extends Component {
               How would you like to search for today?
             </Text>
 
-            <TouchableOpacity style={styles.buttonContainer}>
-            <Button 
-            title = "Scan"
-            type ="raised"
+            <TouchableOpacity 
+            style={styles.buttonShape}
             onPress={() => this.props.navigation.navigate('BarcodeScanner')}
-            />
+            >
+              <Text style={styles.textStyle}>Scan</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.buttonContainer}>
-            <Button 
-            title = "Search"
+            <TouchableOpacity 
+            style={styles.buttonShape}
             onPress={() => this.props.navigation.navigate('SearchScreen')}
-            />
+            >
+              <Text style={styles.textStyle}>Search</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.buttonContainer}>
-            <Button 
-            title = "Browse History"
+            <TouchableOpacity 
+            style={styles.buttonShape}
             onPress={() => this.props.navigation.navigate('OrderHistory')}
-            />
+            >
+              <Text style={styles.textStyle}>Browse History</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonContainer}>
-              <Text>Scan</Text>
+            
+            <TouchableOpacity 
+            style={styles.buttonShape}
+            onPress={() => this.props.navigation.navigate('MedicalFilters')}
+            >
+              <Text style={styles.textStyle}>Medical Filters</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -98,15 +101,21 @@ const styles = StyleSheet.create({
     marginTop: 10,
     textAlign: "center"
   },
-  buttonContainer: {
-    marginTop: 10,
-    height: 45,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 20,
-    width: 250,
-    borderRadius: 30,
-    backgroundColor: "#00BFFF"
+  buttonShape: {
+    marginTop:10,
+    paddingTop:15,
+    paddingBottom:15,
+    marginLeft:30,
+    marginRight:30,
+    backgroundColor:'#00bfff',
+    borderRadius:10,
+    borderWidth: 1,
+    borderColor: '#fff',
+    width:250,
+    height: 45
+  },
+  textStyle: {
+    color: "#ffffff",
+    textAlign: "center"
   }
 });
