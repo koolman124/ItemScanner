@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import { Button, StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 
 export default class HomeScreen extends Component {
   render() {
@@ -19,7 +19,25 @@ export default class HomeScreen extends Component {
             </Text>
 
             <TouchableOpacity style={styles.buttonContainer}>
-              <Text>Search</Text>
+            <Button 
+            title = "Scan"
+            type ="raised"
+            onPress={() => this.props.navigation.navigate('BarcodeScanner')}
+            />
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.buttonContainer}>
+            <Button 
+            title = "Search"
+            onPress={() => this.props.navigation.navigate('SearchScreen')}
+            />
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.buttonContainer}>
+            <Button 
+            title = "Browse History"
+            onPress={() => this.props.navigation.navigate('OrderHistory')}
+            />
             </TouchableOpacity>
             <TouchableOpacity style={styles.buttonContainer}>
               <Text>Scan</Text>
