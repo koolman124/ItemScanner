@@ -15,10 +15,16 @@ def productDetails(upc):
         product['productPic'] = target_product_picture
     if not product['productPic'] and walmart_product_picture:
         product['productPic'] = walmart_product_picture
-    if target_product_link:
-        product['targetLink'] = target_product_link
-    if walmart_product_picture:
-        product['walmartLink'] = walmart_product_link
+    product['productLinks'] = [ 
+        {
+            'target': target_product_link,
+            'walmart': walmart_product_link
+        }
+    ]
+    # if target_product_link:
+    #     product['targetLink'] = target_product_link
+    # if walmart_product_picture:
+    #     product['walmartLink'] = walmart_product_link
     return product
 
 def targetAPI(upc):
