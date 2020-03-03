@@ -47,17 +47,31 @@ class ProductScreen extends Component {
   }
 
   createBuyLinks() {
-    return (
-      <View style={styles.buyRow}>
-        <Image
-            style={{ width: 50, height: 50 }}
-            source={require('../assets/images/target-logo.png')}
-        />
-        <Text style={styles.buyNowText}>
-          Buy Now
-        </Text>
-      </View>
-    );
+    const images = {
+      target: {
+        uri: require('../assets/images/target-logo.png')
+      },
+      walmart: { 
+        uri: require('../assets/images/walmart-logo.png')
+      }
+    }
+    const productlinks_array = this.props.navigation.getParam("productLinks", "[]");
+    let links = [];
+    productlinks_array.map((u, i) => {
+      if (u.link != "") 
+      links.push(
+        <View key={i} style={styles.buyRow}>
+          <Image
+              style={{ width: 50, height: 50 }}
+              source={images[u.store].uri}
+          />
+          <Text onPress={_ => handleBuyNowPress(u.link)} style={styles.buyNowText}>
+            Buy Now
+          </Text>
+        </View>
+      );
+    });
+    return links
   }
 }
 
