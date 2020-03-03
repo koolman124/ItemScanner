@@ -17,8 +17,12 @@ def productDetails(upc):
         product['productPic'] = walmart_product_picture
     product['productLinks'] = [ 
         {
-            'target': target_product_link,
-            'walmart': walmart_product_link
+            'store': 'target',
+            'link': target_product_link
+        },
+        {
+            'store': 'walmart',
+            'link': walmart_product_link
         }
     ]
     # if target_product_link:
