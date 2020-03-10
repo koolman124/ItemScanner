@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "904865197335",
+    "firebase_url": "https://itemfindr.firebaseio.com",
+    "project_id": "itemfindr",
+    "storage_bucket": "itemfindr.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:904865197335:android:9f2c4667855bc779df1b52",
+        "android_client_info": {
+          "package_name": "com.ItemFindr.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "904865197335-gq4lc8ttoobl6qd5jliu9dk8ta5mi2fe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_OWZG-9Qoey2ff2O_Q75VT9S23jtov5E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "904865197335-gq4lc8ttoobl6qd5jliu9dk8ta5mi2fe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
