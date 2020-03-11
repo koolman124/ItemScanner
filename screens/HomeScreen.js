@@ -34,7 +34,7 @@ export default class HomeScreen extends Component {
 
             <TouchableOpacity 
             style={styles.buttonShape}
-            onPress={() => this.props.navigation.navigate('OrderHistory')}
+            onPress={() => this.props.navigation.navigate('BrowseHistory')}
             >
               <Text style={styles.textStyle}>Browse History</Text>
             </TouchableOpacity>
