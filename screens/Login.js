@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text, TextInput, View, Button } from 'react-native'
-import firebase from 'react-native-firebase'
+import firebase from 'firebase'
 
 export default class Login extends React.Component {
 
@@ -10,7 +10,7 @@ export default class Login extends React.Component {
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
-      .then(() => this.props.navigation.navigate('HomeScreen'))
+      .then(() => this.props.navigation.navigate('Main'))
       .catch(error => this.setState({ errorMessage: error.message }))
   }
 
