@@ -39,7 +39,7 @@ def productDetails(upc):
         }
     ]
 
-    if not walmart_relatedItems:
+    if walmart_relatedItems:
         product['relatedItems'] = walmart_relatedItems
     return product
 
