@@ -3,6 +3,19 @@ from flask import request, jsonify
 
 app = flask.Flask(__name__)
 
+mobile_headers = {
+          "user-agent": "Popspedia/28 CFNetwork/978.0.7 Darwin/18.7.0",
+          "content-type": "application/json",
+          "cache-control": "no-cache",
+          "accept-encoding": "gzip, deflate, br",
+          "accept-language": "en-US"
+        }
+
+web_headers = {
+    "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36",
+    "cache-control": "no-cache"
+}
+
 def productDetails(upc):
     target_product_title, target_product_link, target_product_picture = targetAPI(upc)
     walmart_product_title, walmart_product_link, walmart_product_picture, walmart_relatedItems = walmartAPI(upc)
@@ -28,15 +41,8 @@ def productDetails(upc):
     return product
 
 def targetAPI(upc):
-    target_headers = {
-          "user-agent": "Popspedia/28 CFNetwork/978.0.7 Darwin/18.7.0",
-          "content-type": "application/json",
-          "cache-control": "no-cache",
-          "accept-encoding": "gzip, deflate, br",
-          "accept-language": "en-US"
-        }
     target_api_url = "https://redsky.target.com/v4/products/pdp/BARCODE/{}/3284?key=3f015bca9bce7dbb2b377638fa5de0f229713c78&pricing_context=digital&pricing_store_id=3284"
-    r0 = requests.get(target_api_url.format(upc), headers=target_headers)
+    r0 = requests.get(target_api_url.format(upc), headers=mobile_headers)
     try:
         product = r0.json()['products'][0]
         target_product_title = product['title']
@@ -47,15 +53,8 @@ def targetAPI(upc):
         return '','',''
 
 def walmartAPI(upc):
-    walmart_headers = {
-          "user-agent": "Popspedia/28 CFNetwork/978.0.7 Darwin/18.7.0",
-          "content-type": "application/json",
-          "cache-control": "no-cache",
-          "accept-encoding": "gzip, deflate, br",
-          "accept-language": "en-US"
-        }
     walmart_api_url = "https://search.mobile.walmart.com/v1/products-by-code/UPC/{}?storeId=3520"
-    r0 = requests.get(walmart_api_url.format(upc), headers=walmart_headers)
+    r0 = requests.get(walmart_api_url.format(upc), headers=mobile_headers)
     try:
         product = r0.json()['data']['common']
         walmart_product_title = product['name']
@@ -68,15 +67,8 @@ def walmartAPI(upc):
         return '','','',[]
     
 def walmartRelatedProducts(url):
-    walmart_headers = {
-          "user-agent": "Popspedia/28 CFNetwork/978.0.7 Darwin/18.7.0",
-          "content-type": "application/json",
-          "cache-control": "no-cache",
-          "accept-encoding": "gzip, deflate, br",
-          "accept-language": "en-US"
-        }
     query_url = 'https://search.mobile.walmart.com' + url
-    r0 = requests.get(query_url, headers=walmart_headers)
+    r0 = requests.get(query_url, headers=mobile_headers)
     try:
         items = r0.json()['item']
         relatedItems = []
@@ -91,7 +83,8 @@ def walmartRelatedProducts(url):
                 relatedItems.append({
                     'productName' : productName,
                     'productImage' : items[i]['productImageUrl'],
-                    'productUrl' : items[i]['url']    
+                    'store': 'walmart',
+                    'productSku' : items[i]['iD']    
                 })
                 relatedCount += 1
             i += 1
@@ -99,6 +92,27 @@ def walmartRelatedProducts(url):
     except Exception as e:
         print('Error: ' + str(e))
         return []
+
+def fetchItemInfo(store, sku):
+    try:
+        upc = ''
+        if store == 'target':
+            query_url = 'https://redsky.target.com/v2/pdp/tcin/{}?excludes=promotion,taxonomy,bulk_ship,awesome_shop,question_answer_statistics,rating_and_review_reviews,rating_and_review_statistics,deep_red_labels'.format(sku)
+            r0 = requests.get(query_url, headers=web_headers)
+            item = r0.json()['product']['item']
+            upc = item['upc']
+        elif store == 'walmart':
+            query_url = 'https://www.walmart.com/terra-firma/item/{}'.format(sku)
+            r0 = requests.get(query_url, headers=web_headers)
+            products = r0.json()['payload']['products']
+            for product in products:
+                upc = products[product]['upc']
+        print(upc)
+        return upc
+    except Exception as e:
+        print('Error: ' + str(e))
+        return ''
+
 
 
 @app.route('/', methods=['GET'])
