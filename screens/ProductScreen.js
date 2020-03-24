@@ -1,7 +1,7 @@
 import * as WebBrowser from 'expo-web-browser';
 import React, { Component } from "react";
 import {
-  Modal,
+  TouchableOpacity,
   Text,
   TouchableHighlight,
   View,
@@ -22,9 +22,9 @@ class ProductScreen extends Component {
             {this.createImage()}
             {this.createProductName()}
           </View>
-          <View style = {styles.lineStyle} />
-          {this.createBuyLinks()}
-
+          <View style={styles.bodyContent}>
+            {this.createBuyLinks()}
+          </View>
       </View>
     );
   }
@@ -61,13 +61,19 @@ class ProductScreen extends Component {
       if (u.link != "") 
       links.push(
         <View key={i} style={styles.buyRow}>
-          <Image
+          {/* <Image
               style={{ width: 50, height: 50 }}
               source={images[u.store].uri}
           />
           <Text onPress={_ => handleBuyNowPress(u.link)} style={styles.buyNowText}>
             Buy Now
-          </Text>
+          </Text> */}
+          <TouchableOpacity 
+            style={styles.buttonShape}
+            onPress={_ => handleBuyNowPress(u.link)}
+            >
+              <Text style={styles.textStyle}>{u.store}</Text>
+            </TouchableOpacity>
         </View>
       );
     });
@@ -105,6 +111,28 @@ const styles = StyleSheet.create({
   },
   buyRow: {
     flexDirection: "row"
+  },
+  buttonShape: {
+    marginTop:10,
+    paddingTop:15,
+    paddingBottom:15,
+    marginLeft:30,
+    marginRight:30,
+    backgroundColor:'#00bfff',
+    borderRadius:10,
+    borderWidth: 1,
+    borderColor: '#fff',
+    width:250,
+    height: 45
+  },
+  textStyle: {
+    color: "#ffffff",
+    textAlign: "center"
+  },
+  bodyContent: {
+    flex: 1,
+    alignItems: "center",
+    padding: 30
   }
 });
 

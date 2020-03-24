@@ -38,6 +38,9 @@ def productDetails(upc):
             'link': walmart_product_link
         }
     ]
+
+    if not walmart_relatedItems:
+        product['relatedItems'] = walmart_relatedItems
     return product
 
 def targetAPI(upc):
