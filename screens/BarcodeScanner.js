@@ -37,7 +37,8 @@ export default class BarcodeScanner extends React.Component {
           this.props.navigation.navigate("Product", {
                 productName: responseJson['productTitle'],
                 productImage: responseJson['productPic'],
-                productLinks: responseJson['productLinks']
+                productLinks: responseJson['productLinks'],
+                productRelatedItems: responseJson['relatedItems']
             });
         })
         .catch(error => {

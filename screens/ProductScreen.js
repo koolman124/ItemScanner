@@ -3,11 +3,11 @@ import React, { Component } from "react";
 import {
   TouchableOpacity,
   Text,
-  TouchableHighlight,
+  FlatList,
   View,
   StyleSheet,
   Image,
-  ScrollView
+  SafeAreaView
 } from "react-native";
 
 class ProductScreen extends Component {
@@ -17,7 +17,7 @@ class ProductScreen extends Component {
 
   render() {
     return (
-      <View style={styles.bodyContent}>
+      <SafeAreaView style={{flex: 1}}>
           <View style={styles.imageContent}>
             {this.createImage()}
             {this.createProductName()}
@@ -25,7 +25,9 @@ class ProductScreen extends Component {
           <View style={styles.bodyContent}>
             {this.createBuyLinks()}
           </View>
-      </View>
+          <Text style={styles.categoryText}>Related Items</Text>
+          {this.createRelatedLinks()}
+      </SafeAreaView>
     );
   }
 
@@ -57,17 +59,11 @@ class ProductScreen extends Component {
     }
     const productlinks_array = this.props.navigation.getParam("productLinks", "[]");
     let links = [];
+    links.push(<Text key='buynow' style={styles.categoryText}>Buy now</Text>);
     productlinks_array.map((u, i) => {
       if (u.link != "") 
       links.push(
         <View key={i} style={styles.buyRow}>
-          {/* <Image
-              style={{ width: 50, height: 50 }}
-              source={images[u.store].uri}
-          />
-          <Text onPress={_ => handleBuyNowPress(u.link)} style={styles.buyNowText}>
-            Buy Now
-          </Text> */}
           <TouchableOpacity 
             style={styles.buttonShape}
             onPress={_ => handleBuyNowPress(u.link)}
@@ -77,7 +73,26 @@ class ProductScreen extends Component {
         </View>
       );
     });
-    return links
+    return links;
+  }
+
+  createRelatedLinks() {
+    const relatedlinks_array = this.props.navigation.getParam("productRelatedItems", "[]");
+    return <FlatList
+        data = {relatedlinks_array}
+        renderItem={({item}) => 
+          <View style={{flex:1, flexDirection: 'row'}}>
+            <Image
+              source={{uri: item.productImage}}
+              style={{width:100, height:100, margin: 5}}
+            />
+            <View style={{flex: 1,  flexDirection: 'column', height: 100}}>
+              <Text>{item.productName}</Text>
+            </View>
+          </View>
+      }
+      keyExtractor={item => item.productSku}
+    />
   }
 }
 
@@ -86,18 +101,15 @@ function handleBuyNowPress(url) {
 }
 
 const styles = StyleSheet.create({
-  bodyContent: {
-    flex: 1,
-  },
   imageContent: {
     alignItems: "center",
-    padding: 15
+    padding: 5
   },
   name: {
     fontSize: 28,
     color: "#696969",
     fontWeight: "600",
-    padding: 15
+    padding: 10
   },
   lineStyle:{
     borderWidth: 0.5,
@@ -111,6 +123,10 @@ const styles = StyleSheet.create({
   },
   buyRow: {
     flexDirection: "row"
+  },
+  categoryText: {
+    textTransform: "uppercase",
+    textAlign: "center"
   },
   buttonShape: {
     marginTop:10,
@@ -130,9 +146,8 @@ const styles = StyleSheet.create({
     textAlign: "center"
   },
   bodyContent: {
-    flex: 1,
     alignItems: "center",
-    padding: 30
+    padding: 20
   }
 });
 
