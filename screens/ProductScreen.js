@@ -35,7 +35,7 @@ class ProductScreen extends Component {
     const productImage = this.props.navigation.getParam("productImage", null);
     return (
         <Image
-            style={{ width: 180, height: 130 }}
+            style={{ width: 130, height: 130 }}
             source={{ uri: productImage }}
         />
     );
