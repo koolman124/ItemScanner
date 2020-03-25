@@ -10,7 +10,7 @@ class SettingsScreen extends React.Component{
     .then (
       () => {
         Alert.alert("You successfully logged out")
-        this.props.navigation.navigate ("Login");
+        this.props.navigation.navigate ('Login');
       },
       error => {
         Alert.alert(error.message)

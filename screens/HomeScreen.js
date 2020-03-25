@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import {StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import firebase from 'firebase';
 
 export default class HomeScreen extends Component {
   render() {
@@ -12,7 +13,9 @@ export default class HomeScreen extends Component {
         />
         <View style={styles.body}>
           <View style={styles.bodyContent}>
-            <Text style={styles.name}>John Doe</Text>
+            <Text style={styles.name}>
+              {firebase.auth().currentUser.displayName}
+            </Text>
             <Text style={styles.info}>Welcome!</Text>
             <Text style={styles.description}>
               How would you like to search for today?
