@@ -1,83 +1,78 @@
 import React from 'react';
-import { Platform } from 'react-native';
-import { createStackNavigator } from 'react-navigation-stack';
-import { createBottomTabNavigator } from 'react-navigation-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import TabBarIcon from '../components/TabBarIcon';
+import { Ionicons } from '@expo/vector-icons';
+
 import HomeScreen from '../screens/HomeScreen';
 import SearchScreen from '../screens/SearchScreen';
 import ProductScreen from '../screens/ProductScreen';
 import BarcodeScanner from '../screens/BarcodeScanner';
 import SettingsScreen from '../screens/SettingsScreen';
 
-const config = Platform.select({
-  web: { headerMode: 'screen' },
-  default: {},
-});
+const HomeStack = createStackNavigator();
 
-const HomeStack = createStackNavigator(
-  {
-    Home: HomeScreen,
-  },
-  config
-);
+function HomeStackScreen() {
+  return (
+    <HomeStack.Navigator>
+      <HomeStack.Screen name="Home" component={HomeScreen} />
+    </HomeStack.Navigator>
+  )
+}
 
-HomeStack.navigationOptions = {
-  tabBarLabel: 'Home',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-home${focused ? '' : '-outline'}`
-          : 'md-home'
-      }
-    />
-  ),
-};
+const LinksStack = createStackNavigator();
 
-HomeStack.path = '';
+function LinkStackScreen() {
+  return (
+    <LinksStack.Navigator>
+      <LinksStack.Screen name="Links" component={SearchScreen} />
+      <LinksStack.Screen name="BarcodeScanner" component={BarcodeScanner} />
+      <LinksStack.Screen name="Product" component={ProductScreen} />
+    </LinksStack.Navigator>
+  )
+}
 
-const LinksStack = createStackNavigator(
-  {
-    Links: SearchScreen,
-    BarcodeScanner: BarcodeScanner,
-    Product: ProductScreen
-  },
-  config
-);
+const SettingsStack = createStackNavigator();
 
-LinksStack.navigationOptions = {
-  tabBarLabel: 'Search',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-search' : 'md-search'} />
-  ),
-};
+function SettingsStackScreen() {
+  return (
+    <SettingsStack.Navigator>
+      <SettingsStack.Screen name="Settings" component={SettingsScreen} />
+    </SettingsStack.Navigator>
+  )
+}
 
-LinksStack.path = '';
+const Tab = createBottomTabNavigator();
 
-const SettingsStack = createStackNavigator(
-  {
-    Settings: SettingsScreen,
-  },
-  config
-);
+export default function MainTabNavigator() {
+  return (
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
 
-SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
-  ),
-};
+            if (route.name === 'Home') {
+              iconName = focused
+                ? 'md-home'
+                : 'md-home';
+            } else if (route.name === 'Scan') {
+              iconName = focused ? 'ios-search' : 'ios-search';
+            } else if (route.name === 'Settings') {
+              iconName = focused ? 'ios-list-box' : 'ios-list';
+            }
 
-SettingsStack.path = '';
-
-const tabNavigator = createBottomTabNavigator({
-  HomeStack,
-  LinksStack,
-  SettingsStack,
-});
-
-tabNavigator.path = '';
-
-export default tabNavigator;
+            // You can return any component that you like here!
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+        })}
+        tabBarOptions={{
+          activeTintColor: '#00BFFF',
+          inactiveTintColor: 'gray',
+        }}
+        initialRouteName="Home" >
+        <Tab.Screen name="Home" component={HomeStackScreen} />
+        <Tab.Screen name="Scan" component={LinkStackScreen} />
+        <Tab.Screen name="Settings" component={SettingsStackScreen} />
+      </Tab.Navigator>
+  );
+}
