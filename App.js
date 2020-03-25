@@ -40,19 +40,11 @@ export default function App(props) {
       />
     );
   } 
-  if (!isAuthenticated) {
-    return (
-      <NavigationContainer>
-        <AppLoginNavigator />
-      </NavigationContainer>
-    );
-  } else {
-    return (
-      <NavigationContainer>
-        <MainTabNavigator />
-      </NavigationContainer>
-    );
-  }
+  return (
+    <NavigationContainer>
+      <AppNavigator />
+    </NavigationContainer>
+  )
 }
 
 async function loadResourcesAsync() {
