@@ -10,85 +10,116 @@ import {
   SafeAreaView
 } from "react-native";
 
-export default function ProductScreen(props) {
+export default function ProductScreen({ route, navigation }) {
+  const {productName} = route.params;
+  const {productImage} = route.params;
+  const {productLinks} = route.params;
+  const {productRelatedItems} = route.params;
   return (
       <SafeAreaView style={{flex: 1}}>
         <View style={styles.imageContent}>
-        <CreateImage/>
-        <CreateProductName/>
+        <Image
+          style={{ width: 130, height: 130 }}
+          source={{ uri: productImage }}
+        />
+        <Text style={styles.name}>{productName}</Text>
         </View>
         <View style={styles.bodyContent}>
-        <CreateBuyLinks/>
+        <FlatList
+            data = {productLinks}
+            renderItem={({item}) => 
+              <TouchableOpacity 
+              style={styles.buttonShape}
+              onPress={_ => handleBuyNowPress(item.link)}
+              >
+                <Text style={styles.textStyle}>{item.store}</Text>
+              </TouchableOpacity>
+          }
+          keyExtractor={(item, index) => index.toString()}
+        />
         </View>
         <Text style={styles.categoryText}>Related Items</Text>
-        <CreateRelatedLinks/>
+        <FlatList
+            data = {productRelatedItems}
+            renderItem={({item}) => 
+              <View style={{flex:1, flexDirection: 'row'}}>
+                <Image
+                  source={{uri: item.productImage}}
+                  style={{width:100, height:100, margin: 5}}
+                />
+                <View style={{flex: 1,  flexDirection: 'column', height: 100}}>
+                  <Text>{item.productName}</Text>
+                </View>
+              </View>
+          }
+          keyExtractor={item => item.productSku}
+        />
     </SafeAreaView>
   );
 }
 
-function CreateImage(props) {
-  const productImage = this.props.navigation.getParam("productImage", null);
-  return (
-      <Image
-          style={{ width: 130, height: 130 }}
-          source={{ uri: productImage }}
-      />
-  );
-}
+// function CreateImage() {
+//   const productImage = this.props.navigation.getParam("productImage", null);
+//   return (
+//       <Image
+//           style={{ width: 130, height: 130 }}
+//           source={{ uri: productImage }}
+//       />
+//   );
+// }
 
-function CreateProductName() {
-  const productName = this.props.navigation.getParam("productName", null);
-  return (
-      <Text style={styles.name}>{productName}</Text>
-  );
-}
+// function CreateProductName() {
+//   const productName = this.props.navigation.getParam("productName", null);
+//   return (
+//       <Text style={styles.name}>{productName}</Text>
+//   );
+// }
 
-function CreateBuyLinks() {
-  const images = {
-    target: {
-      uri: require('../assets/images/target-logo.png')
-    },
-    walmart: { 
-      uri: require('../assets/images/walmart-logo.png')
-    }
-  }
-  const productlinks_array = this.props.navigation.getParam("productLinks", "[]");
-  let links = [];
-  links.push(<Text key='buynow' style={styles.categoryText}>Buy now</Text>);
-  productlinks_array.map((u, i) => {
-    if (u.link != "") 
-    links.push(
-      <View key={i} style={styles.buyRow}>
-        <TouchableOpacity 
-          style={styles.buttonShape}
-          onPress={_ => handleBuyNowPress(u.link)}
-          >
-            <Text style={styles.textStyle}>{u.store}</Text>
-          </TouchableOpacity>
-      </View>
-    );
-  });
-  return links;
-}
+// function CreateBuyLinks() {
+//   const images = {
+//     target: {
+//       uri: require('../assets/images/target-logo.png')
+//     },
+//     walmart: { 
+//       uri: require('../assets/images/walmart-logo.png')
+//     }
+//   }
+//   let links = [];
+//   links.push(<Text key='buynow' style={styles.categoryText}>Buy now</Text>);
+//   productLinks.map((u, i) => {
+//     if (u.link != "") 
+//     links.push(
+//       <View key={i} style={styles.buyRow}>
+//         <TouchableOpacity 
+//           style={styles.buttonShape}
+//           onPress={_ => handleBuyNowPress(u.link)}
+//           >
+//             <Text style={styles.textStyle}>{u.store}</Text>
+//           </TouchableOpacity>
+//       </View>
+//     );
+//   });
+//   return links;
+// }
 
-function CreateRelatedLinks() {
-  const relatedlinks_array = this.props.navigation.getParam("productRelatedItems", "[]");
-  return <FlatList
-      data = {relatedlinks_array}
-      renderItem={({item}) => 
-        <View style={{flex:1, flexDirection: 'row'}}>
-          <Image
-            source={{uri: item.productImage}}
-            style={{width:100, height:100, margin: 5}}
-          />
-          <View style={{flex: 1,  flexDirection: 'column', height: 100}}>
-            <Text>{item.productName}</Text>
-          </View>
-        </View>
-    }
-    keyExtractor={item => item.productSku}
-  />
-}
+// function CreateRelatedLinks() {
+//   const relatedlinks_array = this.props.navigation.getParam("productRelatedItems", "[]");
+//   return <FlatList
+//       data = {relatedlinks_array}
+//       renderItem={({item}) => 
+//         <View style={{flex:1, flexDirection: 'row'}}>
+//           <Image
+//             source={{uri: item.productImage}}
+//             style={{width:100, height:100, margin: 5}}
+//           />
+//           <View style={{flex: 1,  flexDirection: 'column', height: 100}}>
+//             <Text>{item.productName}</Text>
+//           </View>
+//         </View>
+//     }
+//     keyExtractor={item => item.productSku}
+//   />
+// }
 
 // class ProductScreen extends Component {
 //   state = {

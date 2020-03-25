@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Button } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 
-export default function BarcodeScanner() {
+export default function BarcodeScanner({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
 
@@ -15,7 +15,7 @@ export default function BarcodeScanner() {
 
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
-    getProductFromAPI(data)
+    getProductFromAPI(data, { navigation })
   };
 
   if (hasPermission === null) {
@@ -42,7 +42,7 @@ export default function BarcodeScanner() {
   );
 }
 
-function getProductFromAPI(upc) {
+function getProductFromAPI(upc, { navigation }) {
   return fetch("https://item-finder-app.herokuapp.com/api/v1/productdetails?upc=".concat(upc), {
     method: "GET",
     headers: {
@@ -53,12 +53,12 @@ function getProductFromAPI(upc) {
     .then(response => response.json())
     .then(responseJson => {
       console.log(responseJson);
-      this.props.navigation.navigate("Product", {
+      navigation.navigate("Product", {
             productName: responseJson['productTitle'],
             productImage: responseJson['productPic'],
             productLinks: responseJson['productLinks'],
             productRelatedItems: responseJson['relatedItems']
-        });
+      });
     })
     .catch(error => {
       console.log("Error finding");
