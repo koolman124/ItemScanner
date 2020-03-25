@@ -131,5 +131,16 @@ def api_all():
     results = productDetails(upc)
     return jsonify(results)
 
+@app.route('/api/v1/productinfo', methods=['GET'])
+def api_sku():
+    query_parameters = request.args
+
+    store = query_parameters.get('store')
+    sku = query_parameters.get('sku')
+
+    upc = fetchItemInfo(store, sku)
+    results = productDetails(upc)
+    return jsonify(results)
+
 if __name__ == '__main__':
     app.run()

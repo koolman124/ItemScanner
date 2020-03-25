@@ -15,22 +15,28 @@ export default function ProductScreen({ route, navigation }) {
   const {productImage} = route.params;
   const {productLinks} = route.params;
   const {productRelatedItems} = route.params;
+
+  const [product_name, setProductName] = useState(productName);
+  const [product_image, setProductImage] = useState(productImage);
+  const [product_links, setProductLinks] = useState(productLinks);
+  const [product_relatedItems, setRelatedItems] = useState(productRelatedItems);
+
   return (
       <SafeAreaView style={{flex: 1}}>
         <View style={styles.imageContent}>
         <Image
           style={{ width: 130, height: 130 }}
-          source={{ uri: productImage }}
+          source={{ uri: product_image }}
         />
-        <Text style={styles.name}>{productName}</Text>
+        <Text style={styles.name}>{product_name}</Text>
         </View>
         <View style={styles.bodyContent}>
         <FlatList
-            data = {productLinks}
+            data = {product_links}
             renderItem={({item}) => 
               <TouchableOpacity 
-              style={styles.buttonShape}
-              onPress={_ => handleBuyNowPress(item.link)}
+                style={styles.buttonShape}
+                onPress={_ => handleBuyNowPress(item.link)}
               >
                 <Text style={styles.textStyle}>{item.store}</Text>
               </TouchableOpacity>
@@ -40,9 +46,11 @@ export default function ProductScreen({ route, navigation }) {
         </View>
         <Text style={styles.categoryText}>Related Items</Text>
         <FlatList
-            data = {productRelatedItems}
+            data = {product_relatedItems}
             renderItem={({item}) => 
-              <View style={{flex:1, flexDirection: 'row'}}>
+              <TouchableOpacity 
+                style={{flex:1, flexDirection: 'row'}}
+              >
                 <Image
                   source={{uri: item.productImage}}
                   style={{width:100, height:100, margin: 5}}
@@ -50,7 +58,7 @@ export default function ProductScreen({ route, navigation }) {
                 <View style={{flex: 1,  flexDirection: 'column', height: 100}}>
                   <Text>{item.productName}</Text>
                 </View>
-              </View>
+              </TouchableOpacity>
           }
           keyExtractor={item => item.productSku}
         />
@@ -58,157 +66,32 @@ export default function ProductScreen({ route, navigation }) {
   );
 }
 
-// function CreateImage() {
-//   const productImage = this.props.navigation.getParam("productImage", null);
-//   return (
-//       <Image
-//           style={{ width: 130, height: 130 }}
-//           source={{ uri: productImage }}
-//       />
-//   );
-// }
-
-// function CreateProductName() {
-//   const productName = this.props.navigation.getParam("productName", null);
-//   return (
-//       <Text style={styles.name}>{productName}</Text>
-//   );
-// }
-
-// function CreateBuyLinks() {
-//   const images = {
-//     target: {
-//       uri: require('../assets/images/target-logo.png')
-//     },
-//     walmart: { 
-//       uri: require('../assets/images/walmart-logo.png')
-//     }
-//   }
-//   let links = [];
-//   links.push(<Text key='buynow' style={styles.categoryText}>Buy now</Text>);
-//   productLinks.map((u, i) => {
-//     if (u.link != "") 
-//     links.push(
-//       <View key={i} style={styles.buyRow}>
-//         <TouchableOpacity 
-//           style={styles.buttonShape}
-//           onPress={_ => handleBuyNowPress(u.link)}
-//           >
-//             <Text style={styles.textStyle}>{u.store}</Text>
-//           </TouchableOpacity>
-//       </View>
-//     );
-//   });
-//   return links;
-// }
-
-// function CreateRelatedLinks() {
-//   const relatedlinks_array = this.props.navigation.getParam("productRelatedItems", "[]");
-//   return <FlatList
-//       data = {relatedlinks_array}
-//       renderItem={({item}) => 
-//         <View style={{flex:1, flexDirection: 'row'}}>
-//           <Image
-//             source={{uri: item.productImage}}
-//             style={{width:100, height:100, margin: 5}}
-//           />
-//           <View style={{flex: 1,  flexDirection: 'column', height: 100}}>
-//             <Text>{item.productName}</Text>
-//           </View>
-//         </View>
-//     }
-//     keyExtractor={item => item.productSku}
-//   />
-// }
-
-// class ProductScreen extends Component {
-//   state = {
-
-//   };
-
-//   render() {
-//     return (
-//       <SafeAreaView style={{flex: 1}}>
-//           <View style={styles.imageContent}>
-//             {this.createImage()}
-//             {this.createProductName()}
-//           </View>
-//           <View style={styles.bodyContent}>
-//             {this.createBuyLinks()}
-//           </View>
-//           <Text style={styles.categoryText}>Related Items</Text>
-//           {this.createRelatedLinks()}
-//       </SafeAreaView>
-//     );
-//   }
-
-//   createImage() {
-//     const productImage = this.props.navigation.getParam("productImage", null);
-//     return (
-//         <Image
-//             style={{ width: 130, height: 130 }}
-//             source={{ uri: productImage }}
-//         />
-//     );
-//   }
-
-//   createProductName() {
-//     const productName = this.props.navigation.getParam("productName", null);
-//     return (
-//         <Text style={styles.name}>{productName}</Text>
-//     );
-//   }
-
-//   createBuyLinks() {
-//     const images = {
-//       target: {
-//         uri: require('../assets/images/target-logo.png')
-//       },
-//       walmart: { 
-//         uri: require('../assets/images/walmart-logo.png')
-//       }
-//     }
-//     const productlinks_array = this.props.navigation.getParam("productLinks", "[]");
-//     let links = [];
-//     links.push(<Text key='buynow' style={styles.categoryText}>Buy now</Text>);
-//     productlinks_array.map((u, i) => {
-//       if (u.link != "") 
-//       links.push(
-//         <View key={i} style={styles.buyRow}>
-//           <TouchableOpacity 
-//             style={styles.buttonShape}
-//             onPress={_ => handleBuyNowPress(u.link)}
-//             >
-//               <Text style={styles.textStyle}>{u.store}</Text>
-//             </TouchableOpacity>
-//         </View>
-//       );
-//     });
-//     return links;
-//   }
-
-//   createRelatedLinks() {
-//     const relatedlinks_array = this.props.navigation.getParam("productRelatedItems", "[]");
-//     return <FlatList
-//         data = {relatedlinks_array}
-//         renderItem={({item}) => 
-//           <View style={{flex:1, flexDirection: 'row'}}>
-//             <Image
-//               source={{uri: item.productImage}}
-//               style={{width:100, height:100, margin: 5}}
-//             />
-//             <View style={{flex: 1,  flexDirection: 'column', height: 100}}>
-//               <Text>{item.productName}</Text>
-//             </View>
-//           </View>
-//       }
-//       keyExtractor={item => item.productSku}
-//     />
-//   }
-// }
-
 function handleBuyNowPress(url) {
   WebBrowser.openBrowserAsync(url);
+}
+
+function fetchItemSku(store, sku) {
+  return fetch("https://item-finder-app.herokuapp.com/api/v1/productdetails?upc=".concat(upc), {
+    method: "GET",
+    headers: {
+      'Accept': 'application/json, text/plain, */*',  // It can be used to overcome cors errors
+      'Content-Type': 'application/json'
+    },
+  })
+    .then(response => response.json())
+    .then(responseJson => {
+      console.log(responseJson);
+      navigation.navigate("Product", {
+            productName: responseJson['productTitle'],
+            productImage: responseJson['productPic'],
+            productLinks: responseJson['productLinks'],
+            productRelatedItems: responseJson['relatedItems']
+      });
+    })
+    .catch(error => {
+      console.log("Error finding");
+      console.error(error);
+    });
 }
 
 const styles = StyleSheet.create({
