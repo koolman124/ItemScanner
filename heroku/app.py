@@ -96,6 +96,32 @@ def walmartRelatedProducts(url):
         print('Error: ' + str(e))
         return []
 
+def targetRelatedProducts(sku):
+    query_url = 'https://redsky.target.com/recommended_products/v1?tcins={}&placement_id=adaptpdph1&pricing_store_id=3284&store_id=3284&purchasable_store_ids=3284%2C3249%2C3229%2C2850%2C3321&visitor_id=017031967BE90201B2A1FC53191E7DF5&key=eb2551e4accc14f38cc42d32fbc2b2ea'.format(sku)
+    r0 = requests.get(query_url, headers=web_headers)
+    try:
+        items = r0.json()['products']
+        relatedItems = []
+        foundrelatedItems = False
+        i = 0
+        relatedCount = 0
+        while not foundrelatedItems:
+            if relatedCount == 3:
+                foundrelatedItems = True
+            if items[i]['availability_status'] == 'IN_STOCK':
+                relatedItems.append({
+                    'productName' : items[i]['title'],
+                    'productImage' : items[i]['primary_image_url'],
+                    'store': 'target',
+                    'productSku' : items[i]['tcin']    
+                })
+                relatedCount += 1
+            i += 1
+        return relatedItems
+    except Exception as e:
+        print('Error: ' + str(e))
+        return []
+
 def fetchItemInfo(store, sku):
     try:
         upc = ''
@@ -115,8 +141,6 @@ def fetchItemInfo(store, sku):
     except Exception as e:
         print('Error: ' + str(e))
         return ''
-
-
 
 @app.route('/', methods=['GET'])
 def index():
