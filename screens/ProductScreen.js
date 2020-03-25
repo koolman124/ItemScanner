@@ -1,5 +1,5 @@
 import * as WebBrowser from 'expo-web-browser';
-import React, { Component } from "react";
+import React, { useState } from 'react';
 import {
   TouchableOpacity,
   Text,
@@ -21,6 +21,29 @@ export default function ProductScreen({ route, navigation }) {
   const [product_links, setProductLinks] = useState(productLinks);
   const [product_relatedItems, setRelatedItems] = useState(productRelatedItems);
 
+  function fetchItemSku(store, sku) {
+    // console.log("https://item-finder-app.herokuapp.com/api/v1/productinfo?store=".concat(store).concat("&sku=").concat(sku))
+    return fetch("https://item-finder-app.herokuapp.com/api/v1/productinfo?store=".concat(store).concat("&sku=").concat(sku), {
+      method: "GET",
+      headers: {
+        'Accept': 'application/json, text/plain, */*',  // It can be used to overcome cors errors
+        'Content-Type': 'application/json'
+      },
+    })
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log(responseJson);
+        setProductName(responseJson['productTitle']);
+        setProductImage(responseJson['productPic']);
+        setProductLinks(responseJson['productLinks']);
+        setRelatedItems(responseJson['relatedItems']);
+      })
+      .catch(error => {
+        console.log("Error finding");
+        console.error(error);
+      });
+  }
+
   return (
       <SafeAreaView style={{flex: 1}}>
         <View style={styles.imageContent}>
@@ -31,6 +54,7 @@ export default function ProductScreen({ route, navigation }) {
         <Text style={styles.name}>{product_name}</Text>
         </View>
         <View style={styles.bodyContent}>
+        <Text style={styles.categoryText}>Buy Now</Text>
         <FlatList
             data = {product_links}
             renderItem={({item}) => 
@@ -48,17 +72,20 @@ export default function ProductScreen({ route, navigation }) {
         <FlatList
             data = {product_relatedItems}
             renderItem={({item}) => 
-              <TouchableOpacity 
+              <View 
                 style={{flex:1, flexDirection: 'row'}}
               >
                 <Image
                   source={{uri: item.productImage}}
                   style={{width:100, height:100, margin: 5}}
                 />
-                <View style={{flex: 1,  flexDirection: 'column', height: 100}}>
+                <TouchableOpacity 
+                  style={{flex: 1,  flexDirection: 'column', height: 100}}
+                  onPress={_ => fetchItemSku(item.store, item.productSku)}
+                >
                   <Text>{item.productName}</Text>
-                </View>
-              </TouchableOpacity>
+                </TouchableOpacity>
+              </View>
           }
           keyExtractor={item => item.productSku}
         />
@@ -68,30 +95,6 @@ export default function ProductScreen({ route, navigation }) {
 
 function handleBuyNowPress(url) {
   WebBrowser.openBrowserAsync(url);
-}
-
-function fetchItemSku(store, sku) {
-  return fetch("https://item-finder-app.herokuapp.com/api/v1/productdetails?upc=".concat(upc), {
-    method: "GET",
-    headers: {
-      'Accept': 'application/json, text/plain, */*',  // It can be used to overcome cors errors
-      'Content-Type': 'application/json'
-    },
-  })
-    .then(response => response.json())
-    .then(responseJson => {
-      console.log(responseJson);
-      navigation.navigate("Product", {
-            productName: responseJson['productTitle'],
-            productImage: responseJson['productPic'],
-            productLinks: responseJson['productLinks'],
-            productRelatedItems: responseJson['relatedItems']
-      });
-    })
-    .catch(error => {
-      console.log("Error finding");
-      console.error(error);
-    });
 }
 
 const styles = StyleSheet.create({
