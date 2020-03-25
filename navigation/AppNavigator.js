@@ -8,9 +8,9 @@ import SignUp from '../screens/SignUp';
 
 export default createAppContainer(
   createSwitchNavigator({
-    Loading,
-    Login,
-    SignUp,
+    Loading: Loading,
+    Login: Login,
+    SignUp: SignUp,
     // You could add another route here for authentication.
     // Read more at https://reactnavigation.org/docs/en/auth-flow.html
     Main: MainTabNavigator,
