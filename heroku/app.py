@@ -28,16 +28,23 @@ def productDetails(upc):
         product['productPic'] = target_product_picture
     if not product['productPic'] and walmart_product_picture:
         product['productPic'] = walmart_product_picture
-    product['productLinks'] = [ 
-        {
-            'store': 'target',
-            'link': target_product_link
-        },
-        {
-            'store': 'walmart',
-            'link': walmart_product_link
-        }
-    ]
+    productLinks = []
+    if target_product_link:
+        productLinks.append(
+            {
+                'store': 'target',
+                'link': target_product_link
+            }
+        )
+    if walmart_product_link:
+        productLinks.append(
+            {
+                'store': 'walmart',
+                'link': walmart_product_link
+            }
+        )
+    
+    product['productLinks'] = productLinks
 
     if target_relatedItems:
         product['relatedItems'] = target_relatedItems
