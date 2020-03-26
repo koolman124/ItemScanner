@@ -17,7 +17,7 @@ web_headers = {
 }
 
 def productDetails(upc):
-    target_product_title, target_product_link, target_product_picture = targetAPI(upc)
+    target_product_title, target_product_link, target_product_picture, target_relatedItems = targetAPI(upc)
     walmart_product_title, walmart_product_link, walmart_product_picture, walmart_relatedItems = walmartAPI(upc)
     product = {}
     if target_product_title:
@@ -39,8 +39,12 @@ def productDetails(upc):
         }
     ]
 
-    if walmart_relatedItems:
-        product['relatedItems'] = walmart_relatedItems
+    if target_relatedItems:
+        product['relatedItems'] = target_relatedItems
+
+    if walmart_relatedItems and product['relatedItems']:
+        product['relatedItems'] += walmart_relatedItems
+
     return product
 
 def targetAPI(upc):
@@ -51,9 +55,11 @@ def targetAPI(upc):
         target_product_title = product['title']
         target_product_link = product['targetDotComUri']
         target_product_picture = product['images']['primaryUri']
-        return target_product_title, target_product_link, target_product_picture
+        target_tcin = product['tcin']
+        target_relatedItems = targetRelatedProducts(target_tcin)
+        return target_product_title, target_product_link, target_product_picture, target_relatedItems
     except:
-        return '','',''
+        return '','','',[]
 
 def walmartAPI(upc):
     walmart_api_url = "https://search.mobile.walmart.com/v1/products-by-code/UPC/{}?storeId=3520"
@@ -79,7 +85,7 @@ def walmartRelatedProducts(url):
         i = 0
         relatedCount = 0
         while not foundrelatedItems:
-            if relatedCount == 3:
+            if relatedCount == 2:
                 foundrelatedItems = True
             if items[i]['addableToCart']:
                 productName = str(items[i]['name']).replace('<mark>', '').replace('</mark>', '')
