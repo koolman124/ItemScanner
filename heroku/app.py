@@ -154,6 +154,24 @@ def fetchItemInfo(store, sku):
     except Exception as e:
         print('Error: ' + str(e))
         return ''
+    
+def queryTarget(query):
+    try:
+        query_url = 'https://redsky.target.com/v4/products/list/3284?key=3f015bca9bce7dbb2b377638fa5de0f229713c78&limit=10&pageNumber=1&pricing_context=digital&pricing_store_id=3284&searchTerm={}'
+        r0 = requests.get(query_url.format(query), headers=mobile_headers)
+        query_products = r0.json()['products']
+        products = []
+        for product in query_products:
+            products.append({
+                'productName': product['title'],
+                'productImage': product['images']['primaryUri'],
+                'productUpc': product['upc']
+            })
+        return products
+
+    except Exception as e:
+        print('Error: ' + str(e))
+        return []
 
 @app.route('/', methods=['GET'])
 def index():
@@ -178,6 +196,15 @@ def api_sku():
     upc = fetchItemInfo(store, sku)
     results = productDetails(upc)
     return jsonify(results)
+
+@app.route('/api/v1/products/list', methods=['GET'])
+def api_query():
+    query_parameters = request.args
+
+    query = query_parameters.get('searchTerm')
+
+    products = queryTarget(query)
+    return jsonify(products)
 
 if __name__ == '__main__':
     app.run()
