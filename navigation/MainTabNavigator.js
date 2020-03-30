@@ -9,6 +9,7 @@ import SearchScreen from '../screens/SearchScreen';
 import ProductScreen from '../screens/ProductScreen';
 import BarcodeScanner from '../screens/BarcodeScanner';
 import SettingsScreen from '../screens/SettingsScreen';
+import MapScreen from '../screens/MapScreen';
 
 const HomeStack = createStackNavigator();
 
@@ -19,6 +20,7 @@ function HomeStackScreen() {
       <HomeStack.Screen name="SearchScreen" component={SearchScreen} />
       <HomeStack.Screen name="BarcodeScanner" component={BarcodeScanner} />
       <HomeStack.Screen name="Product" component={ProductScreen} />
+      <HomeStack.Screen name="MapScreen" component={MapScreen} />
     </HomeStack.Navigator>
   )
 }

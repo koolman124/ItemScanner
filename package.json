@@ -14,6 +14,7 @@
   "dependencies": {
     "@expo/samples": "~36.0.0",
     "@expo/vector-icons": "~10.0.0",
+    "@mapbox/polyline": "^1.1.0",
     "@react-native-community/masked-view": "^0.1.7",
     "@react-native-firebase/app": "^6.3.4",
     "@react-navigation/bottom-tabs": "^5.2.4",
@@ -35,6 +36,7 @@
     "react-native-background-geolocation": "^3.4.2",
     "react-native-geolocation-service": "^4.0.0",
     "react-native-gesture-handler": "^1.6.1",
+    "react-native-maps": "^0.27.1",
     "react-native-paper": "^3.6.0",
     "react-native-reanimated": "^1.7.1",
     "react-native-safe-area-context": "^0.7.3",
