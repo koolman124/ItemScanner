@@ -59,7 +59,7 @@ class MapScreen extends Component {
              this.setState({x: "true"})
              return coords
          } catch(error) {
-           console.log('masuk fungsi')
+           console.log('Destination error')
              this.setState({x: "error"})
              return error
          }
