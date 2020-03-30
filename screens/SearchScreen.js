@@ -18,12 +18,6 @@ export default class SearchScreen extends React.Component {
                     onChangeText={query => { this.setState({ firstQuery: query }); }}
                     value={firstQuery}
                 />
-
-                <Text>Or</Text> 
-
-                <Button style={styles.button} icon="camera" mode="outlined" onPress={() => {this.props.navigation.navigate("BarcodeScanner");}}>
-                    Scan
-                </Button>
             </View>
         </View>
       

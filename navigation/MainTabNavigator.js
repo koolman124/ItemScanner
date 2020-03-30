@@ -16,19 +16,10 @@ function HomeStackScreen() {
   return (
     <HomeStack.Navigator>
       <HomeStack.Screen name="Home" component={HomeScreen} />
+      <HomeStack.Screen name="SearchScreen" component={SearchScreen} />
+      <HomeStack.Screen name="BarcodeScanner" component={BarcodeScanner} />
+      <HomeStack.Screen name="Product" component={ProductScreen} />
     </HomeStack.Navigator>
-  )
-}
-
-const LinksStack = createStackNavigator();
-
-function LinkStackScreen() {
-  return (
-    <LinksStack.Navigator>
-      <LinksStack.Screen name="Links" component={SearchScreen} />
-      <LinksStack.Screen name="BarcodeScanner" component={BarcodeScanner} />
-      <LinksStack.Screen name="Product" component={ProductScreen} />
-    </LinksStack.Navigator>
   )
 }
 
@@ -71,7 +62,6 @@ export default function MainTabNavigator() {
         }}
         initialRouteName="Home" >
         <Tab.Screen name="Home" component={HomeStackScreen} />
-        <Tab.Screen name="Scan" component={LinkStackScreen} />
         <Tab.Screen name="Settings" component={SettingsStackScreen} />
       </Tab.Navigator>
   );
