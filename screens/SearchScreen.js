@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     },
 
     searchbar: {
-        width: '95%',
+      width: '95%',
     },
     searchContent: {
         flexDirection: "column",
