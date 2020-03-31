@@ -17,6 +17,7 @@ export default class SearchScreen extends React.Component {
                     placeholder="Search"
                     onChangeText={query => { this.setState({ firstQuery: query }); }}
                     value={firstQuery}
+                    onIconPress = {getProductFromQuery(query,{navigation})}
                 />
             </View>
         </View>
