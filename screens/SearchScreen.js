@@ -1,32 +1,27 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Searchbar, Button } from 'react-native-paper';
 import { View, Text, StyleSheet } from 'react-native';
 
-export default class SearchScreen extends React.Component {
-  state = {
-    firstQuery: '',
-  };
-
-  render() {
-    const { firstQuery } = this.state;
+export default function SearchScreen({ navigation }) {
+    const [firstQuery, setQuery] = useState(null);
     return (
         <View style={styles.container}>
             <View style={styles.searchContent}>
                 <Searchbar
                     style={styles.searchbar}
                     placeholder="Search"
-                    onChangeText={query => { this.setState({ firstQuery: query }); }}
+                    onChangeText={query => { setQuery(query); }}
                     value={firstQuery}
+                    onSubmitEditing={(event) => getProductFromQuery(firstQuery, { navigation })}
                 />
             </View>
         </View>
       
     );
-  }
 }
 
 function getProductFromQuery(query, { navigation }) {
-  return fetch("https://item-finder-app.herokuapp.com/api/v1/productdetails?upc=".concat(query), {
+  return fetch("https://item-finder-app.herokuapp.com/api/v1/products/list?searchTerm=".concat(query), {
     method: "GET",
     headers: {
       'Accept': 'application/json, text/plain, */*',  // It can be used to overcome cors errors
@@ -37,9 +32,7 @@ function getProductFromQuery(query, { navigation }) {
     .then(responseJson => {
       console.log(responseJson);
       navigation.navigate("ProductList", {
-            productName: responseJson['productTitle'],
-            productImage: responseJson['productPic'],
-            productUpc: responseJson['productUpc']
+          productLinks: responseJson
       });
     })
     .catch(error => {

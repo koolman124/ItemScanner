@@ -11,18 +11,13 @@ import {
 } from "react-native";
 
 export default function ProductList({ route, navigation }) {
-  const {productName} = route.params;
-  const {productImage} = route.params;
-  const {productUpc} = route.params;
+  const {productLinks} = route.params;
 
-  const [product_name, setProductName] = useState(productName);
-  const [product_image, setProductImage] = useState(productImage);
-  const [product_links, setProductUpc] = useState(productUpc);
+  const [product_links, setProductLinks] = useState(productLinks);
 
 
-  function fetchItemSku(store, sku) {
-    // console.log("https://item-finder-app.herokuapp.com/api/v1/productinfo?store=".concat(store).concat("&sku=").concat(sku))
-    return fetch("https://item-finder-app.herokuapp.com/api/v1/productinfo?store=".concat(store).concat("&sku=").concat(sku), {
+  function getProductFromAPI(upc, { navigation }) {
+    return fetch("https://item-finder-app.herokuapp.com/api/v1/productdetails?upc=".concat(upc), {
       method: "GET",
       headers: {
         'Accept': 'application/json, text/plain, */*',  // It can be used to overcome cors errors
@@ -32,9 +27,12 @@ export default function ProductList({ route, navigation }) {
       .then(response => response.json())
       .then(responseJson => {
         console.log(responseJson);
-        setProductName(responseJson['productTitle']);
-        setProductImage(responseJson['productPic']);
-        setProductUpc(responseJson['productUpc']);
+        navigation.navigate("Product", {
+              productName: responseJson['productTitle'],
+              productImage: responseJson['productPic'],
+              productLinks: responseJson['productLinks'],
+              productRelatedItems: responseJson['relatedItems']
+        });
       })
       .catch(error => {
         console.log("Error finding");
@@ -43,26 +41,28 @@ export default function ProductList({ route, navigation }) {
   }
 
   return (
-<SafeAreaView style={{flex: 1}}>   
-  <FlatList
-    data = {product_name}
-    renderItem={({item}) => 
-      <TouchableOpacity 
-        style={styles.buttonShape}
-        onPress={_ => handleBuyNowPress(item.link)}
-      >
-        <Text> {item.productName>} </Text>
-        <Text>{item.productUpc}</Text>
-        <Image 
-            source={{uri: item.productImage}}
-            style={{width:100, height:100, margin: 5}}
+    <SafeAreaView style={{flex: 1}}>   
+      <FlatList
+            data = {product_links}
+            renderItem={({item}) => 
+              <View 
+                style={{flex:1, flexDirection: 'row'}}
+              >
+                <Image
+                  source={{uri: item.productImage}}
+                  style={{width:100, height:100, margin: 5}}
+                />
+                <TouchableOpacity 
+                  style={{flex: 1,  flexDirection: 'column', height: 100}}
+                  onPress={_ => getProductFromAPI(item.productUpc, { navigation })}
+                >
+                  <Text>{item.productName}</Text>
+                </TouchableOpacity>
+              </View>
+          }
+          keyExtractor={item => item.productUpc}
         />
-        <Text style={styles.textStyle}>{item.store}</Text>
-      </TouchableOpacity>
-  }
-  keyExtractor={(item, index) => index.toString()}
-/>
-</SafeAreaView>    
+    </SafeAreaView>    
   );
 }
 

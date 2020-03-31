@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 import HomeScreen from '../screens/HomeScreen';
 import SearchScreen from '../screens/SearchScreen';
+import ProductList from '../screens/ProductList';
 import ProductScreen from '../screens/ProductScreen';
 import BarcodeScanner from '../screens/BarcodeScanner';
 import SettingsScreen from '../screens/SettingsScreen';
@@ -21,7 +22,7 @@ function HomeStackScreen() {
       <HomeStack.Screen name="BarcodeScanner" component={BarcodeScanner} />
       <HomeStack.Screen name="Product" component={ProductScreen} />
       <HomeStack.Screen name="MapScreen" component={MapScreen} />
-      <HomeStack.SCreen name="ProductList" component= {ProductList}/>
+      <HomeStack.Screen name="ProductList" component= {ProductList}/>
     </HomeStack.Navigator>
   )
 }
