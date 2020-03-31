@@ -25,6 +25,29 @@ export default class SearchScreen extends React.Component {
   }
 }
 
+function getProductFromQuery(query, { navigation }) {
+  return fetch("https://item-finder-app.herokuapp.com/api/v1/productdetails?upc=".concat(query), {
+    method: "GET",
+    headers: {
+      'Accept': 'application/json, text/plain, */*',  // It can be used to overcome cors errors
+      'Content-Type': 'application/json'
+    },
+  })
+    .then(response => response.json())
+    .then(responseJson => {
+      console.log(responseJson);
+      navigation.navigate("ProductList", {
+            productName: responseJson['productTitle'],
+            productImage: responseJson['productPic'],
+            productUpc: responseJson['productUpc']
+      });
+    })
+    .catch(error => {
+      console.log("Error finding");
+      console.error(error);
+    });
+}
+
 // SearchScreen.navigationOptions = {
 //   header: null,
 // };
