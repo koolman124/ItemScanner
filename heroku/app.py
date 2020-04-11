@@ -81,7 +81,30 @@ def walmartAPI(upc):
         return walmart_product_title, walmart_product_link, walmart_product_picture, walmart_relatedItems
     except:
         return '','','',[]
-    
+
+def barnesAPI(upc):
+    barnes_headers = { "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 12_1_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/16D57 SKAVA_NATIVE_IOS SkavaiPhoneApp",
+            "Referer": "https://m.barnesandnoble.com/",
+            "Accept-Language": "en-us",
+            "X-Requested-With": "XMLHttpRequest"}
+
+    r0 = requests.get('https://m.barnesandnoble.com/skavastream/core/v5/barnesandnobleapi/productdetails/get?campaignId=1&productids={}'.format(upc), headers=barnes_headers)
+
+    try:
+        json_response = json.loads(r0.text)
+
+        product = json_response['children']['products']
+
+        status = product[0]['properties']['buyinfo']['instock']
+        barnes_product_title = product[0]['name']
+        barnes_product_picture = product[0]['image']
+        if status == 'true':
+            barnes_product_link = 'https://www.barnesandnoble.com/w/jarman/123?ean={}'.format(upc)
+            # price = product[0]['properties']['buyinfo']['pricing']['prices'][0]['value']
+            return barnes_product_title, barnes_product_link, barnes_product_picture
+    except:
+        return '','',''
+        
 def walmartRelatedProducts(url):
     query_url = 'https://search.mobile.walmart.com' + url
     r0 = requests.get(query_url, headers=mobile_headers)
@@ -168,10 +191,26 @@ def queryTarget(query):
                 'productUpc': product['upc']
             })
         return products
-
     except Exception as e:
         print('Error: ' + str(e))
         return []
+
+def bestBuyinstorestock(sku,zip):
+    bestbuy_headers = {
+        'authority': 'www.bestbuy.com',
+        'accept': 'application/json, text/javascript, */*; q=0.01',
+        'user-agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1',
+        'content-type': 'application/json',
+        'origin': 'https://www.bestbuy.com',
+        'sec-fetch-site': 'same-origin',
+        'sec-fetch-mode': 'cors',
+        'accept-language': 'en-US,en;q=0.9'
+    }
+
+    data = '{"locationId":"30","zipCode":"%s","showOnShelf":true,"lookupInStoreQuantity":false,"xboxAllAccess":false,"consolidated":false,"items":[{"sku":"%s","condition":null,"quantity":1,"itemSeqNumber":"1","reservationToken":null,"selectedServices":[],"requiredAccessories":[],"isTradeIn":false}]}'%(zip,sku)
+
+    response = requests.post('https://www.bestbuy.com/productfulfillment/c/api/2.0/storeAvailability', headers=bestbuy_headers, data=data)
+    return response.text
 
 @app.route('/', methods=['GET'])
 def index():
