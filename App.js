@@ -8,10 +8,9 @@ import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import ApiKeys from './constants/ApiKeys';
 import * as firebase from 'firebase';
+import Geocoder from 'react-native-geocoding';
 
-import AppLoginNavigator from "./navigation/AppLoginNavigator";
 import AppNavigator from './navigation/AppNavigator';
-import MainTabNavigator from './navigation/MainTabNavigator'
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
@@ -61,6 +60,8 @@ async function loadResourcesAsync() {
       'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
     }),
   ]);
+  // Initialize the module (needs to be done only once)
+  Geocoder.init("AIzaSyBCMdef0ei_Fg6Z7MLBcLxNW-EIZEDDJrA"); // use a valid API key
 }
 
 function handleLoadingError(error) {

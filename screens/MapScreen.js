@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { AppRegistry, StyleSheet, Dimensions, Image, View, StatusBar, TouchableOpacity } from "react-native";
+import Geocoder from 'react-native-geocoding';
 import MapView from 'react-native-maps';
 import Polyline from '@mapbox/polyline';
 
@@ -15,6 +16,7 @@ class MapScreen extends Component {
       x: 'false',
       cordLatitude: 40.706679,
       cordLongitude: -73.813274,
+      Address: null
     };
     this.mergeLot = this.mergeLot.bind(this);
   }
@@ -28,11 +30,20 @@ class MapScreen extends Component {
            error: null,
          });
          this.mergeLot();
+         Geocoder.from(position.coords.latitude, position.coords.longitude).then(json => {
+           console.log(json);
+           var addressComponent = json.results[0].address_components;
+           this.setState({
+             Address: addressComponent
+            })
+            console.log(addressComponent);
+          }).catch(error => console.warn(error));
        },
        (error) => this.setState({ error: error.message }),
        { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
      );
    }
+   
   mergeLot(){
     if (this.state.latitude != null && this.state.longitude!=null)
      {
