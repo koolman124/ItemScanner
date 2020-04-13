@@ -54,19 +54,22 @@ export default function ProductScreen({ route, navigation }) {
         <Text style={styles.name}>{product_name}</Text>
         </View>
         <View style={styles.bodyContent}>
-        <Text style={styles.categoryText}>Buy Now</Text>
-        <FlatList
-            data = {product_links}
-            renderItem={({item}) => 
-              <TouchableOpacity 
-                style={styles.buttonShape}
-                onPress={_ => handleBuyNowPress(item.link)}
-              >
-                <Text style={styles.textStyle}>{item.store}</Text>
-              </TouchableOpacity>
-          }
-          keyExtractor={(item, index) => index.toString()}
-        />
+          <Text style={styles.categoryText}>Buy Now</Text>
+          <FlatList
+              data = {product_links}
+              renderItem={({item}) => 
+                <TouchableOpacity 
+                  style={styles.buttonShape}
+                  onPress={_ => handleBuyNowPress(item.link)}
+                >
+                  <Text style={styles.textStyle}>{item.store}</Text>
+                </TouchableOpacity>
+            }
+            keyExtractor={(item, index) => index.toString()}
+          />
+          <TouchableOpacity>
+            <Text>Find near me</Text>
+          </TouchableOpacity>
         </View>
         <Text style={styles.categoryText}>Related Items</Text>
         <FlatList

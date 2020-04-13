@@ -194,6 +194,25 @@ def queryTarget(query):
     except Exception as e:
         print('Error: ' + str(e))
         return []
+    
+def targetInstore(sku, zip):
+    url = 'https://api.target.com/available_to_promise/v2/{}/search?key=eb2551e4accc14f38cc42d32fbc2b2ea&nearby={}&field_groups=location_summary&multichannel_option=none&inventory_type=stores&requested_quantity=1&radius=250'.format(sku, zip)
+    print(url)
+
+    response = requests.get(url, headers=web_headers)
+
+    stores = response.json()['products'][0]['locations']
+    instock_stores = []
+    for store in stores:
+        if store['availability_status'] == 'IN_STOCK':
+            instock_stores.append(
+                {
+                    'store_name': store['store_name'],
+                    'store_address': store['store_address']                
+                }
+            )
+    
+    return instock_stores
 
 def bestBuyinstorestock(sku,zip):
     bestbuy_headers = {
@@ -244,6 +263,19 @@ def api_query():
 
     products = queryTarget(query)
     return jsonify(products)
+
+@app.route('/api/v1/productinfo/nearby', methods=['GET'])
+def api_nearby():
+    query_parameters = request.args
+
+    store = query_parameters.get('store')
+    sku = query_parameters.get('sku')
+    postal_code = query_parameters.get('postal_code')
+
+    if store == 'target':
+        instore_stores = targetInstore(sku, postal_code)
+
+    return jsonify(instore_stores)
 
 if __name__ == '__main__':
     app.run()
