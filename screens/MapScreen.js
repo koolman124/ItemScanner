@@ -37,6 +37,7 @@ class MapScreen extends Component {
              Address: addressComponent
             })
             console.log(addressComponent);
+            console.log(addressComponent[addressComponent.length - 1].short_name);
           }).catch(error => console.warn(error));
        },
        (error) => this.setState({ error: error.message }),
