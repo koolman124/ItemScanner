@@ -61,7 +61,7 @@ async function loadResourcesAsync() {
     }),
   ]);
   // Initialize the module (needs to be done only once)
-  Geocoder.init("AIzaSyBCMdef0ei_Fg6Z7MLBcLxNW-EIZEDDJrA"); // use a valid API key
+  Geocoder.init("AIzaSyDOvtaZcwp8poCK6JZMOB0UZMwqX9mffkk"); // use a valid API key
 }
 
 function handleLoadingError(error) {
