@@ -1,6 +1,7 @@
 import * as WebBrowser from 'expo-web-browser';
 import React, { useState, useEffect } from 'react';
 import Geocoder from 'react-native-geocoding';
+import firebase from 'firebase'
 import {
   TouchableOpacity,
   Text,
@@ -18,6 +19,7 @@ export default function ProductScreen({ route, navigation }) {
   const {productImage} = route.params;
   const {productLinks} = route.params;
   const {productRelatedItems} = route.params;
+  const {productUpc} = route.params;
 
   const [product_name, setProductName] = useState(productName);
   const [product_image, setProductImage] = useState(productImage);
@@ -27,6 +29,10 @@ export default function ProductScreen({ route, navigation }) {
   const [error, setError] = useState("");
   const [postal_code, setPostal] = useState("");
   const [loading_status, setLoading] = useState(false);
+  firebase.database()
+  .ref("users/"+ firebase.auth().currentUser.uid + "/Scan History/Product List/")
+  .child(ProductName)
+  .set({Image: productImage, UPC:productUpc});
 
   function fetchItemSku(store, sku) {
     setLoading(true);

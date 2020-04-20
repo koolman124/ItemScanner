@@ -25,6 +25,7 @@ function HomeStackScreen() {
       <HomeStack.Screen name="TestMapScreen" component={TestMapScreen} />
       <HomeStack.Screen name="ProductList" component= {ProductList}/>
       <HomeStack.Screen name="MapScreen" component={MapScreen} />
+      <HomeStack.Screen name="ScanHistory" component={ScanHistory} />
     </HomeStack.Navigator>
   )
 }

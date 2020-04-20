@@ -57,7 +57,8 @@ function getProductFromAPI(upc, { navigation }) {
             productName: responseJson['productTitle'],
             productImage: responseJson['productPic'],
             productLinks: responseJson['productLinks'],
-            productRelatedItems: responseJson['relatedItems']
+            productRelatedItems: responseJson['relatedItems'],
+            productUPC: upc
       });
     })
     .catch(error => {
