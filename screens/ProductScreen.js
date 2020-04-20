@@ -11,6 +11,8 @@ import {
   SafeAreaView
 } from "react-native";
 
+import Loader from '../components/Loader';
+
 export default function ProductScreen({ route, navigation }) {
   const {productName} = route.params;
   const {productImage} = route.params;
@@ -23,9 +25,11 @@ export default function ProductScreen({ route, navigation }) {
   const [product_relatedItems, setRelatedItems] = useState(productRelatedItems);
   const [user_position, setPosition] = useState({latitude: 0, longitude: 0});
   const [error, setError] = useState("");
-  const [postal_code, setPostal] = useState("")
+  const [postal_code, setPostal] = useState("");
+  const [loading_status, setLoading] = useState(false);
 
   function fetchItemSku(store, sku) {
+    setLoading(true);
     return fetch("https://item-finder-app.herokuapp.com/api/v1/productinfo?store=".concat(store).concat("&sku=").concat(sku), {
       method: "GET",
       headers: {
@@ -35,6 +39,7 @@ export default function ProductScreen({ route, navigation }) {
     })
       .then(response => response.json())
       .then(responseJson => {
+        setLoading(false);
         console.log(responseJson);
         setProductName(responseJson['productTitle']);
         setProductImage(responseJson['productPic']);
@@ -48,6 +53,7 @@ export default function ProductScreen({ route, navigation }) {
   }
 
   function getStoresFromAPI(store, url, zip, { navigation }) {
+    setLoading(true);
     navigator.geolocation.getCurrentPosition(
       (position) => {
         setPosition({
@@ -78,6 +84,7 @@ export default function ProductScreen({ route, navigation }) {
           })
             .then(response => response.json())
             .then(responseJson => {
+              setLoading(false);
               // console.log(responseJson);
               var user_coord = {
                 latitude: position.coords.latitude,
@@ -103,6 +110,7 @@ export default function ProductScreen({ route, navigation }) {
 
   return (
       <SafeAreaView style={{flex: 1}}>
+        <Loader loading={loading_status} />
         <View style={styles.imageContent}>
         <Image
           style={{ width: 130, height: 130 }}

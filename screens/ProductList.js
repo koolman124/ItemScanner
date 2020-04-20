@@ -10,13 +10,16 @@ import {
   SafeAreaView
 } from "react-native";
 
+import Loader from '../components/Loader';
+
 export default function ProductList({ route, navigation }) {
   const {productLinks} = route.params;
 
   const [product_links, setProductLinks] = useState(productLinks);
-
+  const [loading_status, setLoading] = useState(false);
 
   function getProductFromAPI(upc, { navigation }) {
+    setLoading(true);
     return fetch("https://item-finder-app.herokuapp.com/api/v1/productdetails?upc=".concat(upc), {
       method: "GET",
       headers: {
@@ -26,6 +29,7 @@ export default function ProductList({ route, navigation }) {
     })
       .then(response => response.json())
       .then(responseJson => {
+        setLoading(false);
         console.log(responseJson);
         navigation.navigate("Product", {
               productName: responseJson['productTitle'],
@@ -41,7 +45,8 @@ export default function ProductList({ route, navigation }) {
   }
 
   return (
-    <SafeAreaView style={{flex: 1}}>   
+    <SafeAreaView style={{flex: 1}}>
+      <Loader loading={loading_status} />   
       <FlatList
             data = {product_links}
             renderItem={({item}) => 
