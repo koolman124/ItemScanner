@@ -1,6 +1,7 @@
 import * as WebBrowser from 'expo-web-browser';
 import React, { useState, useEffect } from 'react';
 import Geocoder from 'react-native-geocoding';
+import firebase from 'firebase'
 import {
   TouchableOpacity,
   Text,
@@ -11,21 +12,30 @@ import {
   SafeAreaView
 } from "react-native";
 
+import Loader from '../components/Loader';
+
 export default function ProductScreen({ route, navigation }) {
   const {productName} = route.params;
   const {productImage} = route.params;
   const {productLinks} = route.params;
   const {productRelatedItems} = route.params;
+  const {productUpc} = route.params;
 
   const [product_name, setProductName] = useState(productName);
   const [product_image, setProductImage] = useState(productImage);
   const [product_links, setProductLinks] = useState(productLinks);
   const [product_relatedItems, setRelatedItems] = useState(productRelatedItems);
-  const [position, setPosition] = useState({latitude: 0, longitude: 0});
+  const [user_position, setPosition] = useState({latitude: 0, longitude: 0});
   const [error, setError] = useState("");
-  const [postal_code, setPostal] = useState("")
+  const [postal_code, setPostal] = useState("");
+  const [loading_status, setLoading] = useState(false);
+  firebase.database()
+  .ref("users/"+ firebase.auth().currentUser.uid + "/Scan History/Product List/")
+  .child(ProductName)
+  .set({Image: productImage, UPC:productUpc});
 
   function fetchItemSku(store, sku) {
+    setLoading(true);
     return fetch("https://item-finder-app.herokuapp.com/api/v1/productinfo?store=".concat(store).concat("&sku=").concat(sku), {
       method: "GET",
       headers: {
@@ -35,6 +45,7 @@ export default function ProductScreen({ route, navigation }) {
     })
       .then(response => response.json())
       .then(responseJson => {
+        setLoading(false);
         console.log(responseJson);
         setProductName(responseJson['productTitle']);
         setProductImage(responseJson['productPic']);
@@ -48,6 +59,7 @@ export default function ProductScreen({ route, navigation }) {
   }
 
   function getStoresFromAPI(store, url, zip, { navigation }) {
+    setLoading(true);
     navigator.geolocation.getCurrentPosition(
       (position) => {
         setPosition({
@@ -58,8 +70,8 @@ export default function ProductScreen({ route, navigation }) {
         Geocoder.from(position.coords.latitude, position.coords.longitude).then(json => {
           var addressComponent = json.results[0].address_components;
           //  console.log(addressComponent);
-          //  console.log(addressComponent[addressComponent.length - 1].short_name);
-           setPostal(addressComponent[addressComponent.length - 1].short_name);
+          // console.log(addressComponent[addressComponent.length - 1].short_name);
+          //  setPostal(addressComponent[addressComponent.length - 1].short_name);
            var sku;
           if (url.includes("target")){
             var str = url.split("-")
@@ -69,7 +81,7 @@ export default function ProductScreen({ route, navigation }) {
             var str = url.split("/")
             sku = str[str.length-1]
           }
-          return fetch("https://item-finder-app.herokuapp.com/api/v1/productinfo/nearby?store=".concat(store).concat("&sku=").concat(sku).concat("&postal_code=").concat(zip), {
+          return fetch("https://item-finder-app.herokuapp.com/api/v1/productinfo/nearby?store=".concat(store).concat("&sku=").concat(sku).concat("&postal_code=").concat(addressComponent[addressComponent.length - 1].short_name), {
             method: "GET",
             headers: {
               'Accept': 'application/json, text/plain, */*',  // It can be used to overcome cors errors
@@ -78,10 +90,18 @@ export default function ProductScreen({ route, navigation }) {
           })
             .then(response => response.json())
             .then(responseJson => {
-              console.log(responseJson);
-              // navigation.navigate("Stores", {
-              //       stores: responseJson
-              // });
+              setLoading(false);
+              // console.log(responseJson);
+              var user_coord = {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude
+              }
+              // console.log(user_position);
+              // console.log(user_coord);
+              navigation.navigate("MapScreen", {
+                    stores: responseJson,
+                    user_coords: user_coord
+              });
             })
             .catch(error => {
               console.log("Error finding");
@@ -96,6 +116,7 @@ export default function ProductScreen({ route, navigation }) {
 
   return (
       <SafeAreaView style={{flex: 1}}>
+        <Loader loading={loading_status} />
         <View style={styles.imageContent}>
         <Image
           style={{ width: 130, height: 130 }}
