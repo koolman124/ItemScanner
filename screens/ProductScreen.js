@@ -21,7 +21,7 @@ export default function ProductScreen({ route, navigation }) {
   const [product_image, setProductImage] = useState(productImage);
   const [product_links, setProductLinks] = useState(productLinks);
   const [product_relatedItems, setRelatedItems] = useState(productRelatedItems);
-  const [position, setPosition] = useState({latitude: 0, longitude: 0});
+  const [user_position, setPosition] = useState({latitude: 0, longitude: 0});
   const [error, setError] = useState("");
   const [postal_code, setPostal] = useState("")
 
@@ -58,8 +58,8 @@ export default function ProductScreen({ route, navigation }) {
         Geocoder.from(position.coords.latitude, position.coords.longitude).then(json => {
           var addressComponent = json.results[0].address_components;
           //  console.log(addressComponent);
-          //  console.log(addressComponent[addressComponent.length - 1].short_name);
-           setPostal(addressComponent[addressComponent.length - 1].short_name);
+          // console.log(addressComponent[addressComponent.length - 1].short_name);
+          //  setPostal(addressComponent[addressComponent.length - 1].short_name);
            var sku;
           if (url.includes("target")){
             var str = url.split("-")
@@ -69,7 +69,7 @@ export default function ProductScreen({ route, navigation }) {
             var str = url.split("/")
             sku = str[str.length-1]
           }
-          return fetch("https://item-finder-app.herokuapp.com/api/v1/productinfo/nearby?store=".concat(store).concat("&sku=").concat(sku).concat("&postal_code=").concat(zip), {
+          return fetch("https://item-finder-app.herokuapp.com/api/v1/productinfo/nearby?store=".concat(store).concat("&sku=").concat(sku).concat("&postal_code=").concat(addressComponent[addressComponent.length - 1].short_name), {
             method: "GET",
             headers: {
               'Accept': 'application/json, text/plain, */*',  // It can be used to overcome cors errors
@@ -78,10 +78,17 @@ export default function ProductScreen({ route, navigation }) {
           })
             .then(response => response.json())
             .then(responseJson => {
-              console.log(responseJson);
-              // navigation.navigate("Stores", {
-              //       stores: responseJson
-              // });
+              // console.log(responseJson);
+              var user_coord = {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude
+              }
+              // console.log(user_position);
+              // console.log(user_coord);
+              navigation.navigate("MapScreen", {
+                    stores: responseJson,
+                    user_coords: user_coord
+              });
             })
             .catch(error => {
               console.log("Error finding");
