@@ -11,6 +11,7 @@ import ProductScreen from '../screens/ProductScreen';
 import BarcodeScanner from '../screens/BarcodeScanner';
 import SettingsScreen from '../screens/SettingsScreen';
 import MapScreen from '../screens/MapScreen';
+import MedFilters from '../screens/MedFilters';
 
 const HomeStack = createStackNavigator();
 
@@ -22,6 +23,7 @@ function HomeStackScreen() {
       <HomeStack.Screen name="BarcodeScanner" component={BarcodeScanner} />
       <HomeStack.Screen name="Product" component={ProductScreen} />
       <HomeStack.Screen name="MapScreen" component={MapScreen} />
+      <HomeStack.Screen name="MedFilters" component={MedFilters} />
       <HomeStack.Screen name="ProductList" component= {ProductList}/>
     </HomeStack.Navigator>
   )
