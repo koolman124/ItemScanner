@@ -1,59 +1,81 @@
-import React, {Component} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import CheckBox from 'react-native-check-box'
+import React, { Component } from 'react';
+import { View, Text, StyleSheet, Button } from 'react-native';
+import CheckboxFormX from 'react-native-checkbox-form';
+import firebase from 'firebase'
 
-export default class MedFilters extends React.Component {
-    constructor(props){
-        super(props);
-        this.state={
-          isChecked:false,
-          allergy2:false
-        }
-      }
-      render() {
-        return (    
-          <View style={styles.container}>
-              <Text style={styles.welcome}>Select the filters you would like to apply:</Text>
-            <CheckBox
-                style={{flex: 1, padding: 10}}
-                onClick={()=>{
-                  this.setState({
-                      isChecked:!this.state.isChecked
-                  })
-                }}    
-                isChecked={this.state.isChecked}
-            />
-            <Text style={styles.CheckBoxTxt}>Peanuts</Text>
-            <CheckBox
-                style={{flex: 1, padding: 10}}
-                onClick={()=>{
-                  this.setState({
-                      allergy2:!this.state.allergy2
-                  })
-                }}    
-                allergy2={this.state.allergy2}
-            />
-            <Text style={styles.CheckBoxTxt}>Chocolate</Text>
-          </View>
-        );
-      }
+const allergies = [
+    {
+        label: 'Peanuts',
+        value: 'Peanuts',
+        checked: false
+    },
+    {
+        label: 'Chocolate',
+        value: 'Chocolate',
+        checked: false
+    },
+    {
+        label: 'Cinnamon',
+        value: 'Cinnamon',
+        checked: false
+    },
+];
+
+export default class MedFilters extends Component {
+    _onSelect = ( item ) => {
+      console.log(item);
+    };
+
+    constructor(props) {
+      super(props);
+      this.state = {
+        allergies:false
+      };
     }
-    
+    onFilter = () => {
+            firebase
+              .database()
+              .ref("users/" + firebase.auth().currentUser.uid + '/Filters')
+              .set({
+                allergies: this.state.allergies
+              });
+    };
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <Text style= {styles.welcome}>Select all the filters that apply: </Text>
+              <CheckboxFormX
+                  style= {styles.form}
+                  dataSource={allergies}
+                  itemShowKey="label"
+                  itemCheckedKey="checked"
+                  iconSize={40}
+                  formHorizontal={false}
+                  labelHorizontal={true}
+                  onChecked={(item) => this._onSelect(item)}
+              />
+        <Button title="Submit" onPress={this.onFilter} />
+     </View>
+    );
+  }
+}
+
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'flex-start',
-      alignItems: 'flex-start',
-      backgroundColor: '#F5FCFF',
-    },
-      welcome: {
-      fontSize: 20,    
-      textAlign: 'center',
-      margin: 10,
-    },
-    CheckBoxTxt: {
-        alignItems: 'flex-start',
-        flex: 1,
-        marginLeft: 50
-    }
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
+  },
+  form: {
+    flex: 1,
+    padding: 10,
+    fontSize: 20,
+  },
+  welcome: {
+    fontSize: 20,
+    textAlign: 'center',
+    margin: 10,
+  },
 })
