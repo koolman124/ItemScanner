@@ -313,8 +313,13 @@ def grabTerraFirma(stores, SKU):
             store_address = store['storeAddress'] + ', ' + store['storeCity'] + \
                 ', ' + store['storeStateOrProvinceCode'] + \
                 ' ' + store['storePostalCode']
-            response = requests.get(
-                'https://maps.googleapis.com/maps/api/geocode/json?address=' + store_address + '&XXXX')
+            while True:
+                try:
+                    response = requests.get(
+                        'https://maps.googleapis.com/maps/api/geocode/json?address=' + store_address + '&key=XXXX')
+                    break
+                except Exception as e:
+                    log('Error: ' + str(e))
             instock_stores.append(
                 {
                     'store_name': store['storeName'],
