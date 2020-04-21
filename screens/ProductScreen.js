@@ -29,10 +29,11 @@ export default function ProductScreen({ route, navigation }) {
   const [error, setError] = useState("");
   const [postal_code, setPostal] = useState("");
   const [loading_status, setLoading] = useState(false);
-  firebase.database()
-  .ref("users/"+ firebase.auth().currentUser.uid + "/Scan History/Product List/")
-  .child(ProductName)
-  .set({Image: productImage, UPC:productUpc});
+
+  // firebase.database()
+  // .ref("users/"+ firebase.auth().currentUser.uid + "/Scan History/Product List/")
+  // .child(productName)
+  // .set({Image: productImage, UPC:productUpc});
 
   function fetchItemSku(store, sku) {
     setLoading(true);
