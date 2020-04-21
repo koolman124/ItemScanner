@@ -237,21 +237,26 @@ def targetInstore(sku, zip):
         except Exception as e:
             log('Error: ' + str(e))
 
-    stores = response.json()['products'][0]['locations']
-    instock_stores = []
-    for store in stores:
-        if store['availability_status'] == 'IN_STOCK':
-            response = requests.get(
-                'https://maps.googleapis.com/maps/api/geocode/json?address=' + store['store_address'] + '&key=XXXX')
-            instock_stores.append(
-                {
-                    'store_name': store['store_name'],
-                    'store_address': store['store_address'],
-                    'store_coords': response.json()['results'][0]['geometry']['location']
-                }
-            )
+    try:
 
-    return instock_stores
+        stores = response.json()['products'][0]['locations']
+        instock_stores = []
+        for store in stores:
+            if store['availability_status'] == 'IN_STOCK':
+                response = requests.get(
+                    'https://maps.googleapis.com/maps/api/geocode/json?address=' + store['store_address'] + '&key=XXXX')
+                instock_stores.append(
+                    {
+                        'store_name': store['store_name'],
+                        'store_address': store['store_address'],
+                        'store_coords': response.json()['results'][0]['geometry']['location']
+                    }
+                )
+
+        return instock_stores
+    except Exception as e:
+        log('Error: ' + str(e))
+        return []
 
 
 def bestBuyinstorestock(sku, zip):
@@ -299,36 +304,41 @@ def grabTerraFirma(stores, SKU):
         except Exception as e:
             log('Error: ' + str(e))
 
-    offers = response.json()['payload']['offers']
+    try:
 
-    nearby_stores = []
-    for element in offers:
-        if offers[element]['sellerId'] == 'F55CDC31AB754BB68FE0B39041159D63':
-            nearby_stores = offers[element]['fulfillment']['pickupOptions']
+        offers = response.json()['payload']['offers']
 
-    instock_stores = []
+        nearby_stores = []
+        for element in offers:
+            if offers[element]['sellerId'] == 'F55CDC31AB754BB68FE0B39041159D63':
+                nearby_stores = offers[element]['fulfillment']['pickupOptions']
 
-    for store in nearby_stores:
-        if store['availability'] == 'AVAILABLE' and store['inStoreStockStatus'] == 'In stock':
-            store_address = store['storeAddress'] + ', ' + store['storeCity'] + \
-                ', ' + store['storeStateOrProvinceCode'] + \
-                ' ' + store['storePostalCode']
-            while True:
-                try:
-                    response = requests.get(
-                        'https://maps.googleapis.com/maps/api/geocode/json?address=' + store_address + '&key=XXXX')
-                    break
-                except Exception as e:
-                    log('Error: ' + str(e))
-            instock_stores.append(
-                {
-                    'store_name': store['storeName'],
-                    'store_address': store_address,
-                    'store_coords': response.json()['results'][0]['geometry']['location']
-                }
-            )
+        instock_stores = []
 
-    return instock_stores
+        for store in nearby_stores:
+            if store['availability'] == 'AVAILABLE' and store['inStoreStockStatus'] == 'In stock':
+                store_address = store['storeAddress'] + ', ' + store['storeCity'] + \
+                    ', ' + store['storeStateOrProvinceCode'] + \
+                    ' ' + store['storePostalCode']
+                while True:
+                    try:
+                        response = requests.get(
+                            'https://maps.googleapis.com/maps/api/geocode/json?address=' + store_address + '&key=XXXX')
+                        break
+                    except Exception as e:
+                        log('Error: ' + str(e))
+                instock_stores.append(
+                    {
+                        'store_name': store['storeName'],
+                        'store_address': store_address,
+                        'store_coords': response.json()['results'][0]['geometry']['location']
+                    }
+                )
+
+        return instock_stores
+    except Exception as e:
+        log('Error: ' + str(e))
+        return []
 
 
 def walmartInstore(sku, zip):
