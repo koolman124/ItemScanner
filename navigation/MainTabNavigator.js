@@ -11,7 +11,11 @@ import ProductScreen from '../screens/ProductScreen';
 import BarcodeScanner from '../screens/BarcodeScanner';
 import SettingsScreen from '../screens/SettingsScreen';
 import MapScreen from '../screens/MapScreen';
+<<<<<<< HEAD
+import MedFilters from '../screens/MedFilters';
+=======
 import TestMapScreen from '../screens/TestMapScreen';
+>>>>>>> 837a2b3b88e3e4d19ea4bfc6c05c0eb98ab4eb86
 
 const HomeStack = createStackNavigator();
 
@@ -22,9 +26,15 @@ function HomeStackScreen() {
       <HomeStack.Screen name="SearchScreen" component={SearchScreen} />
       <HomeStack.Screen name="BarcodeScanner" component={BarcodeScanner} />
       <HomeStack.Screen name="Product" component={ProductScreen} />
+<<<<<<< HEAD
+      <HomeStack.Screen name="MapScreen" component={MapScreen} />
+      <HomeStack.Screen name="MedFilters" component={MedFilters} />
+=======
       <HomeStack.Screen name="TestMapScreen" component={TestMapScreen} />
+>>>>>>> 837a2b3b88e3e4d19ea4bfc6c05c0eb98ab4eb86
       <HomeStack.Screen name="ProductList" component= {ProductList}/>
       <HomeStack.Screen name="MapScreen" component={MapScreen} />
+      <HomeStack.Screen name="ScanHistory" component={ScanHistory} />
     </HomeStack.Navigator>
   )
 }

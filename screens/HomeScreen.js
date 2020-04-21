@@ -48,6 +48,13 @@ export default class HomeScreen extends Component {
             >
               <Text style={styles.textStyle}>Map Screen</Text>
             </TouchableOpacity>
+            
+            <TouchableOpacity 
+            style={styles.buttonShape}
+            onPress={() => this.props.navigation.navigate('MedFilters')}
+            >
+              <Text style={styles.textStyle}>Filters</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>

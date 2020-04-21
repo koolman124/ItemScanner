@@ -34,6 +34,7 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
     "react-native-background-fetch": "^3.0.3",
     "react-native-background-geolocation": "^3.4.2",
+    "react-native-check-box": "^2.1.7",
     "react-native-geocoding": "^0.4.0",
     "react-native-geolocation-service": "^4.0.0",
     "react-native-gesture-handler": "^1.6.1",
