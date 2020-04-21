@@ -1,7 +1,7 @@
 import * as WebBrowser from 'expo-web-browser';
 import React, { useState, useEffect } from 'react';
 import Geocoder from 'react-native-geocoding';
-import firebase from 'firebase'
+import * as firebase from "firebase";
 import {
   TouchableOpacity,
   Text,

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import {StyleSheet, Text, View, Image, TouchableOpacity,SafeAreaView } from "react-native";
-import firebase from 'firebase';
+import * as firebase from "firebase";
 
 const productList = firebase
 .database()
