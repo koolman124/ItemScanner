@@ -205,10 +205,12 @@ def targetInstore(sku, zip):
     instock_stores = []
     for store in stores:
         if store['availability_status'] == 'IN_STOCK':
+            response = requests.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + store['store_address'] + '&key=XXXX')
             instock_stores.append(
                 {
                     'store_name': store['store_name'],
-                    'store_address': store['store_address']                
+                    'store_address': store['store_address'],
+                    'store_coords': response.json()['results'][0]['geometry']['location']             
                 }
             )
     
@@ -230,6 +232,63 @@ def bestBuyinstorestock(sku,zip):
 
     response = requests.post('https://www.bestbuy.com/productfulfillment/c/api/2.0/storeAvailability', headers=bestbuy_headers, data=data)
     return response.text
+
+def grabTerraFirma(stores, SKU):
+    headers = {
+        'pragma': 'no-cache',
+        'content-type': 'application/json',
+        'accept': '*/*',
+        'cache-control': 'no-cache',
+        'authority': 'www.walmart.com',
+        'referer': 'https://www.walmart.com/product/{}/sellers'.format(SKU),
+    }
+
+    params = (
+        ('rgs', 'OFFER_PRODUCT,OFFER_INVENTORY,OFFER_PRICE,VARIANT_SUMMARY'),
+    )
+
+    data = '{{"itemId":"{}","paginationContext":{{"selected":false}},"storeFrontIds":{}}}'.format(SKU, stores)
+
+    response = requests.post('https://www.walmart.com/terra-firma/fetch', headers=headers, params=params, data=data, timeout=10)
+    offers = response.json()['payload']['offers']
+
+    nearby_stores = []
+    for element in offers:
+        if offers[element]['sellerId'] == 'F55CDC31AB754BB68FE0B39041159D63':
+            nearby_stores = offers[element]['fulfillment']['pickupOptions']
+
+    instock_stores = []
+
+    for store in nearby_stores:
+        if store['availability'] == 'AVAILABLE' and store['inStoreStockStatus'] == 'In stock':
+            store_address = store['storeAddress'] + ', ' + store['storeCity'] + ', ' + store['storeStateOrProvinceCode'] + ' ' + store['storePostalCode']
+            response = requests.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + store_address + '&XXXX')
+            instock_stores.append(
+                {
+                    'store_name': store['storeName'],
+                    'store_address': store_address,
+                    'store_coords': response.json()['results'][0]['geometry']['location']             
+                }
+            )
+
+    return instock_stores
+
+def walmartInstore(sku, zip):
+    response = requests.get('https://www.walmart.com/store/finder/electrode/api/stores?singleLineAddr={}&distance=25'.format(zip, headers=web_headers))
+    stores = response.json()['payload']['storesData']['stores']
+
+    post_stores = []
+
+    for store in stores:
+        post_stores.append(
+            {
+                "usStoreId":store['id'],
+                "preferred":False,
+                "semStore":False
+            }
+        )
+
+    return grabTerraFirma(json.dumps(post_stores), sku)
 
 @app.route('/', methods=['GET'])
 def index():
@@ -274,6 +333,8 @@ def api_nearby():
 
     if store == 'target':
         instore_stores = targetInstore(sku, postal_code)
+    if store == 'walmart'
+        instore_stores = walmartInstore(sku, postal_code)
 
     return jsonify(instore_stores)
 
