@@ -1,6 +1,7 @@
 import flask
 import json
 import requests
+import datetime
 from flask import request, jsonify
 
 app = flask.Flask(__name__)
@@ -17,6 +18,10 @@ web_headers = {
     "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36",
     "cache-control": "no-cache"
 }
+
+
+def log(string):
+    print(datetime.datetime.now().strftime("%H:%M:%S.%f")[:-4] + ' ' + string)
 
 
 def productDetails(upc):
@@ -77,7 +82,13 @@ def targetAPI(upc):
 
 def walmartAPI(upc):
     walmart_api_url = "https://search.mobile.walmart.com/v1/products-by-code/UPC/{}?storeId=3520"
-    r0 = requests.get(walmart_api_url.format(upc), headers=mobile_headers)
+    while True:
+        try:
+            r0 = requests.get(walmart_api_url.format(upc),
+                              headers=mobile_headers)
+            break
+        except Exception as e:
+            log('Error: ' + str(e))
     try:
         product = r0.json()['data']['common']
         walmart_product_title = product['name']
@@ -219,7 +230,12 @@ def targetInstore(sku, zip):
         sku, zip)
     print(url)
 
-    response = requests.get(url, headers=web_headers)
+    while True:
+        try:
+            response = requests.get(url, headers=web_headers)
+            break
+        except Exception as e:
+            log('Error: ' + str(e))
 
     stores = response.json()['products'][0]['locations']
     instock_stores = []
@@ -275,8 +291,14 @@ def grabTerraFirma(stores, SKU):
     data = '{{"itemId":"{}","paginationContext":{{"selected":false}},"storeFrontIds":{}}}'.format(
         SKU, stores)
 
-    response = requests.post('https://www.walmart.com/terra-firma/fetch',
-                             headers=headers, params=params, data=data, timeout=10)
+    while True:
+        try:
+            response = requests.post('https://www.walmart.com/terra-firma/fetch',
+                                     headers=headers, params=params, data=data, timeout=10)
+            break
+        except Exception as e:
+            log('Error: ' + str(e))
+
     offers = response.json()['payload']['offers']
 
     nearby_stores = []
@@ -305,8 +327,14 @@ def grabTerraFirma(stores, SKU):
 
 
 def walmartInstore(sku, zip):
-    response = requests.get(
-        'https://www.walmart.com/store/finder/electrode/api/stores?singleLineAddr={}&distance=25'.format(zip, headers=web_headers))
+    while True:
+        try:
+            response = requests.get(
+                'https://www.walmart.com/store/finder/electrode/api/stores?singleLineAddr={}&distance=25'.format(zip, headers=web_headers))
+            break
+        except Exception as e:
+            log('Error: ' + str(e))
+
     stores = response.json()['payload']['storesData']['stores']
 
     post_stores = []
