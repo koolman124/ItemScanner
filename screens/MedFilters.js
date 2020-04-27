@@ -29,7 +29,9 @@ export default class MedFilters extends Component {
     constructor(props) {
       super(props);
       this.state = {
-        allergies:false
+        Peanuts:false,
+        Chocolate:false,
+        Cinnamon:false
       };
     }
     onFilter = () => {
@@ -37,7 +39,9 @@ export default class MedFilters extends Component {
               .database()
               .ref("users/" + firebase.auth().currentUser.uid + '/Filters')
               .set({
-                allergies: this.state.allergies
+                Peanuts: this.state.Peanuts,
+                Chocolate: this.state.Chocolate,
+                Cinnamon: this.state.Cinnamon
               });
     };
 
