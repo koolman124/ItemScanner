@@ -31,12 +31,9 @@ export default function ProductScreen({ route, navigation }) {
   const [loading_status, setLoading] = useState(false);
 
   // firebase.database()
-  // .ref("users/"+ firebase.auth().currentUser.uid + "/Scan History/Product List/")
-  // .set({ProductName: productName});
-  // firebase.database()
-  // .ref("users/"+ firebase.auth().currentUser.uid + "/Scan History/Product List/"+ ProductName)
-  // .set(
-  // {Image: productImage,
+  // .ref("users/"+ firebase.auth().currentUser.uid + "/scanHistory/productList/" + productUpc)
+  // .set({ProductName: productName,
+  //  Image: productImage,
   //  UPC:productUpc});
 
   function fetchItemSku(store, sku) {
