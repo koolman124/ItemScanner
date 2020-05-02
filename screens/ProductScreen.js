@@ -32,8 +32,12 @@ export default function ProductScreen({ route, navigation }) {
 
   // firebase.database()
   // .ref("users/"+ firebase.auth().currentUser.uid + "/Scan History/Product List/")
-  // .child(productName)
-  // .set({Image: productImage, UPC:productUpc});
+  // .set({ProductName: productName});
+  // firebase.database()
+  // .ref("users/"+ firebase.auth().currentUser.uid + "/Scan History/Product List/"+ ProductName)
+  // .set(
+  // {Image: productImage,
+  //  UPC:productUpc});
 
   function fetchItemSku(store, sku) {
     setLoading(true);
