@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import {StyleSheet, Text, View, Image, TouchableOpacity,SafeAreaView } from "react-native";
 import * as firebase from "firebase";
 
-const productList = firebase
+/*const productList = firebase
 .database()
 .ref("users/"+ firebase.auth().currentUser.uid + "/Scan History/Product List/")
 .once('value').

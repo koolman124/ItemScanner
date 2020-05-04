@@ -61,7 +61,8 @@ export default function ProductList({ route, navigation }) {
               productImage: responseJson['productPic'],
               productLinks: responseJson['productLinks'],
               productRelatedItems: responseJson['relatedItems'],
-              userAllergies: responseJson['allergies']
+              userAllergies: responseJson['allergies'],
+              productUPC : upc
         });
       })
       .catch(error => {

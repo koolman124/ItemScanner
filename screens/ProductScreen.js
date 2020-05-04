@@ -19,9 +19,9 @@ export default function ProductScreen({ route, navigation }) {
   const {productImage} = route.params;
   const {productLinks} = route.params;
   const {productRelatedItems} = route.params;
-  const {productUpc} = route.params;
+  const {productUPC} = route.params;
   const {userAllergies} = route.params;
-
+  
   const [product_name, setProductName] = useState(productName);
   const [product_image, setProductImage] = useState(productImage);
   const [product_links, setProductLinks] = useState(productLinks);
@@ -31,6 +31,15 @@ export default function ProductScreen({ route, navigation }) {
   const [error, setError] = useState("");
   const [postal_code, setPostal] = useState("");
   const [loading_status, setLoading] = useState(false);
+
+
+  firebase.database()
+  .ref("users/"+ firebase.auth().currentUser.uid + "/scanHistory/productList/" + productUPC)
+  .set(
+    {ProductName: productName,
+    Image: productImage,
+    UPC: productUPC}
+    );
 
   function fetchItemSku(store, sku) {
     setLoading(true);
