@@ -15,6 +15,7 @@ export default function BarcodeScanner({ navigation }) {
 
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
+    console.log(data);
     getProductFromAPI(data, { navigation })
   };
 

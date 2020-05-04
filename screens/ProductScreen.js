@@ -20,25 +20,21 @@ export default function ProductScreen({ route, navigation }) {
   const {productLinks} = route.params;
   const {productRelatedItems} = route.params;
   const {productUpc} = route.params;
+  const {userAllergies} = route.params;
 
   const [product_name, setProductName] = useState(productName);
   const [product_image, setProductImage] = useState(productImage);
   const [product_links, setProductLinks] = useState(productLinks);
   const [product_relatedItems, setRelatedItems] = useState(productRelatedItems);
+  const [user_allergies, setAllergies] = useState(userAllergies)
   const [user_position, setPosition] = useState({latitude: 0, longitude: 0});
   const [error, setError] = useState("");
   const [postal_code, setPostal] = useState("");
   const [loading_status, setLoading] = useState(false);
 
-  // firebase.database()
-  // .ref("users/"+ firebase.auth().currentUser.uid + "/scanHistory/productList/" + productUpc)
-  // .set({ProductName: productName,
-  //  Image: productImage,
-  //  UPC:productUpc});
-
   function fetchItemSku(store, sku) {
     setLoading(true);
-    return fetch("https://item-finder-app.herokuapp.com/api/v1/productinfo?store=".concat(store).concat("&sku=").concat(sku), {
+    return fetch("https://item-finder-app.herokuapp.com/api/v1/productinfo?store=".concat(store).concat("&sku=").concat(sku).concat("&userAllergies=").concat(userAllergies), {
       method: "GET",
       headers: {
         'Accept': 'application/json, text/plain, */*',  // It can be used to overcome cors errors
@@ -53,6 +49,7 @@ export default function ProductScreen({ route, navigation }) {
         setProductImage(responseJson['productPic']);
         setProductLinks(responseJson['productLinks']);
         setRelatedItems(responseJson['relatedItems']);
+        setAllergies(responseJson['allergies']);
       })
       .catch(error => {
         console.log("Error finding");
@@ -116,6 +113,18 @@ export default function ProductScreen({ route, navigation }) {
     );
   }
 
+  function createWarning(){
+    if (user_allergies === undefined || user_allergies.length === 0) {
+      return;
+    } else {
+      return (
+        <View>
+          <Text style={styles.warningText}>May contain an ingredient you are allergic to!</Text>
+        </View>
+      )
+    }
+  }
+
   return (
       <SafeAreaView style={{flex: 1}}>
         <Loader loading={loading_status} />
@@ -126,6 +135,7 @@ export default function ProductScreen({ route, navigation }) {
         />
         <Text style={styles.name}>{product_name}</Text>
         </View>
+        {createWarning()}
         <View style={styles.bodyContent}>
           <Text style={styles.categoryText}>Buy Now</Text>
           <FlatList
@@ -201,6 +211,10 @@ const styles = StyleSheet.create({
   },
   buyRow: {
     flexDirection: "row"
+  },
+  warningText: {
+    textAlign: "center",
+    color: "red"
   },
   categoryText: {
     textTransform: "uppercase",

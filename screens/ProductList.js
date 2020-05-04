@@ -1,5 +1,5 @@
 import * as WebBrowser from 'expo-web-browser';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   TouchableOpacity,
   Text,
@@ -9,6 +9,7 @@ import {
   Image,
   SafeAreaView
 } from "react-native";
+import * as firebase from "firebase";
 
 import Loader from '../components/Loader';
 
@@ -17,10 +18,33 @@ export default function ProductList({ route, navigation }) {
 
   const [product_links, setProductLinks] = useState(productLinks);
   const [loading_status, setLoading] = useState(false);
+  const [user_allergies, setAllergies] = useState([])
 
-  function getProductFromAPI(upc, { navigation }) {
+  useEffect(() => {
+    getAllergies()
+  });
+
+  function getAllergies() {
+    const allergies = firebase.database().ref("users/" + firebase.auth().currentUser.uid + "/Filters");
+    allergies.once('value', function(snapshot) {
+      let items = snapshot.val();
+      let allergies = [];
+      var objectKeys = Object.keys(items);
+      for (var i = 0; i < objectKeys.length; i++) {
+        var allergy = objectKeys[i];
+        if (items[allergy] == true) {
+          allergies.push(allergy);
+        }
+      }
+
+      setAllergies(allergies);
+    });
+  }
+
+  function getProductFromAPI(upc, userAllergies, { navigation }) {
     setLoading(true);
-    return fetch("https://item-finder-app.herokuapp.com/api/v1/productdetails?upc=".concat(upc), {
+    console.log("https://item-finder-app.herokuapp.com/api/v1/productdetails?upc=".concat(upc).concat("&userAllergies=").concat(userAllergies));
+    return fetch("https://item-finder-app.herokuapp.com/api/v1/productdetails?upc=".concat(upc).concat("&userAllergies=").concat(userAllergies), {
       method: "GET",
       headers: {
         'Accept': 'application/json, text/plain, */*',  // It can be used to overcome cors errors
@@ -30,12 +54,14 @@ export default function ProductList({ route, navigation }) {
       .then(response => response.json())
       .then(responseJson => {
         setLoading(false);
-        console.log(responseJson);
+        // console.log(responseJson);
+        // console.log(responseJson['allergies'])
         navigation.navigate("Product", {
               productName: responseJson['productTitle'],
               productImage: responseJson['productPic'],
               productLinks: responseJson['productLinks'],
-              productRelatedItems: responseJson['relatedItems']
+              productRelatedItems: responseJson['relatedItems'],
+              userAllergies: responseJson['allergies']
         });
       })
       .catch(error => {
@@ -59,7 +85,7 @@ export default function ProductList({ route, navigation }) {
                 />
                 <TouchableOpacity 
                   style={{flex: 1,  flexDirection: 'column', height: 100}}
-                  onPress={_ => getProductFromAPI(item.productUpc, { navigation })}
+                  onPress={_ => getProductFromAPI(item.productUpc, user_allergies, { navigation })}
                 >
                   <Text>{item.productName}</Text>
                 </TouchableOpacity>
