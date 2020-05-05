@@ -128,7 +128,8 @@ export default function ProductScreen({ route, navigation }) {
     } else {
       return (
         <View>
-          <Text style={styles.warningText}>May contain an ingredient you are allergic to!</Text>
+          <Text style={styles.warningText}>May contain an ingredient you are allergic to:</Text>
+          <Text style={styles.warningText}>{user_allergies}</Text>
         </View>
       )
     }
