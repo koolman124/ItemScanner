@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Alert, Button } from "react-native";
+import { List } from 'react-native-paper';
 import firebase from 'firebase';
 
 class SettingsScreen extends React.Component{
@@ -20,6 +21,18 @@ class SettingsScreen extends React.Component{
  render() {
    return (
      <View style = {StyleSheet.Container}>
+      <List.Item
+        title="User Allergies"
+        description="View/Set your allergies"
+        left={props => <List.Icon {...props} icon="medical-bag" />}
+        onPress={() => this.props.navigation.navigate('MedFilters')}
+      />
+      <List.Item
+        title="Item History"
+        description="View your item history"
+        left={props => <List.Icon {...props} icon="history" />}
+        onPress={() => this.props.navigation.navigate('BrowseHistory')}
+      />
        <Button
        title = "Sign Out"
        onPress={this.signoutUser}
