@@ -151,19 +151,22 @@ export default function ProductScreen({ route, navigation }) {
           <FlatList
               data = {product_links}
               renderItem={({item}) => 
-              <View>
-                <TouchableOpacity 
-                  style={styles.buttonShape}
-                  onPress={_ => handleBuyNowPress(item.link)}
-                >
-                  <Text style={styles.textStyle}>{item.store}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.buttonShape}
-                  onPress={_ => getStoresFromAPI(item.store, item.link, postal_code, { navigation })}
-                >
-                  <Text style={styles.textStyle}>Find near me</Text>
-                </TouchableOpacity>
+              <View style={styles.storeComponent}>
+                <Text style={styles.storeText}>{item.store}:</Text>
+                <View style={styles.buyRow}>
+                  <TouchableOpacity 
+                    style={styles.buttonShape}
+                    onPress={_ => handleBuyNowPress(item.link)}
+                  >
+                    <Text style={styles.textStyle}>Online</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.buttonShape}
+                    onPress={_ => getStoresFromAPI(item.store, item.link, postal_code, { navigation })}
+                  >
+                    <Text style={styles.textStyle}>Find near me</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             }
             keyExtractor={(item, index) => index.toString()}
@@ -214,10 +217,16 @@ const styles = StyleSheet.create({
     borderColor:"black",
     margin:5,
   },
+  storeText: {
+    textTransform: "uppercase",
+  },
   buyNowText: {
     padding: 9,
     fontSize: 20,
     color: '#2e78b7',
+  },
+  storeComponent: {
+    margin: 5
   },
   buyRow: {
     flexDirection: "row"
@@ -228,14 +237,15 @@ const styles = StyleSheet.create({
   },
   categoryText: {
     textTransform: "uppercase",
-    textAlign: "center"
+    textAlign: "center",
+    margin: 2
   },
   buttonShape: {
-    marginTop:10,
-    paddingTop:15,
-    paddingBottom:15,
-    marginLeft:30,
-    marginRight:30,
+    marginTop:5,
+    paddingTop:5,
+    paddingBottom:5,
+    marginLeft:5,
+    marginRight:5,
     backgroundColor:'#00bfff',
     borderRadius:10,
     borderWidth: 1,
