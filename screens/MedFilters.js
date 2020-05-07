@@ -1,4 +1,4 @@
-import { CheckBox, Text, Button, StyleSheet, View } from 'react-native';
+import { CheckBox, Text, Button, StyleSheet, Alert, View } from 'react-native';
 import React, {Component} from 'react';
 import firebase from 'firebase'
 
@@ -10,6 +10,9 @@ export default class MedFilters extends React.Component {
       Peanuts: false,
       Chocolate: false,
       Cinnamon: false,
+      Soy: false,
+      Wheat: false,
+      Milk: false
     }
   }
   onFilter = () => {
@@ -19,8 +22,13 @@ export default class MedFilters extends React.Component {
       .set({
         Peanuts: this.state.Peanuts,
         Chocolate: this.state.Chocolate,
-        Cinnamon: this.state.Cinnamon
+        Cinnamon: this.state.Cinnamon,
+        Soy: this.state.Soy,
+        Wheat: this.state.Wheat,
+        Milk: this.state.Milk
       });
+      Alert.alert("The selected have been applied")
+      this.props.navigation.navigate('Home')
 };
 
   render() {
@@ -44,6 +52,24 @@ export default class MedFilters extends React.Component {
           onChange={() => this.setState({ Cinnamon: !this.state.Cinnamon })}
         />
         <Text style = {styles.label}> Cinnamon</Text>
+
+        <CheckBox
+          value={this.state.Soy}
+          onChange={() => this.setState({ Soy: !this.state.Soy })}
+        />
+        <Text style = {styles.label}> Soy </Text>
+
+        <CheckBox
+          value={this.state.Wheat}
+          onChange={() => this.setState({ Wheat: !this.state.Wheat })}
+        />
+        <Text style = {styles.label}> Wheat </Text>
+        <CheckBox
+          value={this.state.Milk}
+          onChange={() => this.setState({ Milk: !this.state.Milk })}
+        />
+        <Text style = {styles.label}> Milk </Text>
+
         <Button title="Submit" onPress= {this.onFilter}/>
       </View>
     )
