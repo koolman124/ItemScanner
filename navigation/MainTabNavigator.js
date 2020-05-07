@@ -23,7 +23,6 @@ function HomeStackScreen() {
       <HomeStack.Screen name="SearchScreen" component={SearchScreen} />
       <HomeStack.Screen name="BarcodeScanner" component={BarcodeScanner} />
       <HomeStack.Screen name="Product" component={ProductScreen} />
-      <HomeStack.Screen name="MedFilters" component={MedFilters} />
       <HomeStack.Screen name="TestMapScreen" component={TestMapScreen} />
       <HomeStack.Screen name="ProductList" component= {ProductList}/>
       <HomeStack.Screen name="MapScreen" component={MapScreen} />
@@ -37,6 +36,7 @@ function SettingsStackScreen() {
   return (
     <SettingsStack.Navigator>
       <SettingsStack.Screen name="Settings" component={SettingsScreen} />
+      <HomeStack.Screen name="MedFilters" component={MedFilters} />
     </SettingsStack.Navigator>
   )
 }

@@ -34,27 +34,6 @@ export default class HomeScreen extends Component {
             >
               <Text style={styles.textStyle}>Search</Text>
             </TouchableOpacity>
-
-            <TouchableOpacity 
-            style={styles.buttonShape}
-            onPress={() => this.props.navigation.navigate('BrowseHistory')}
-            >
-              <Text style={styles.textStyle}>Browse History</Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity 
-            style={styles.buttonShape}
-            onPress={() => this.props.navigation.navigate('TestMapScreen')}
-            >
-              <Text style={styles.textStyle}>Map Screen</Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity 
-            style={styles.buttonShape}
-            onPress={() => this.props.navigation.navigate('MedFilters')}
-            >
-              <Text style={styles.textStyle}>Filters</Text>
-            </TouchableOpacity>
           </View>
         </View>
       </View>
