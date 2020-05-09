@@ -27,8 +27,7 @@ export default class MedFilters extends React.Component {
         Wheat: this.state.Wheat,
         Milk: this.state.Milk
       });
-      Alert.alert("The selected have been applied")
-      this.props.navigation.navigate('Home')
+      Alert.alert("The selected have been applied");
 };
 
   render() {
