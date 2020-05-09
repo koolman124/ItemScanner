@@ -13,6 +13,7 @@ import SettingsScreen from '../screens/SettingsScreen';
 import MapScreen from '../screens/MapScreen';
 import MedFilters from '../screens/MedFilters';
 import TestMapScreen from '../screens/TestMapScreen';
+import BrowseHistory from '../screens/BrowseHistory';
 
 const HomeStack = createStackNavigator();
 
@@ -36,7 +37,8 @@ function SettingsStackScreen() {
   return (
     <SettingsStack.Navigator>
       <SettingsStack.Screen name="Settings" component={SettingsScreen} />
-      <HomeStack.Screen name="MedFilters" component={MedFilters} />
+      <SettingsStack.Screen name="MedFilters" component={MedFilters} />
+      <SettingsStack.Screen name="BrowseHitory" component={BrowseHistory}/>
     </SettingsStack.Navigator>
   )
 }
