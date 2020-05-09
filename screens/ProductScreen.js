@@ -32,15 +32,6 @@ export default function ProductScreen({ route, navigation }) {
   const [postal_code, setPostal] = useState("");
   const [loading_status, setLoading] = useState(false);
 
-
-  firebase.database()
-  .ref("users/"+ firebase.auth().currentUser.uid + "/scanHistory/productList/" + productUPC)
-  .set(
-    {ProductName: productName,
-    Image: productImage,
-    UPC: productUPC}
-    );
-
   function fetchItemSku(store, sku) {
     setLoading(true);
     return fetch("https://item-finder-app.herokuapp.com/api/v1/productinfo?store=".concat(store).concat("&sku=").concat(sku).concat("&userAllergies=").concat(userAllergies), {

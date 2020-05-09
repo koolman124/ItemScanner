@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, Button } from 'react-native';
+import { Text, View, StyleSheet, Button, Alert } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import * as firebase from "firebase";
 
 export default function BarcodeScanner({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
@@ -54,13 +55,23 @@ function getProductFromAPI(upc, { navigation }) {
     .then(response => response.json())
     .then(responseJson => {
       console.log(responseJson);
-      navigation.navigate("Product", {
+      if(responseJson.hasOwnProperty('Error')){
+        Alert.alert("Item scanned could not be found. Please try again or scan another item.")
+      }
+      else {
+        firebase.database().ref("users/"+ firebase.auth().currentUser.uid + "/scanHistory/productList/" + upc).set({
+          ProductName: responseJson['productTitle'],
+          Image: responseJson['productPic'],
+          UPC: upc
+        });
+        navigation.navigate("Product", {
             productName: responseJson['productTitle'],
             productImage: responseJson['productPic'],
             productLinks: responseJson['productLinks'],
             productRelatedItems: responseJson['relatedItems'],
             productUPC: upc
-      });
+        });
+      }
     })
     .catch(error => {
       console.log("Error finding");
