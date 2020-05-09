@@ -38,7 +38,7 @@ function SettingsStackScreen() {
     <SettingsStack.Navigator>
       <SettingsStack.Screen name="Settings" component={SettingsScreen} />
       <SettingsStack.Screen name="MedFilters" component={MedFilters} />
-      <SettingsStack.Screen name="BrowseHitory" component={BrowseHistory}/>
+      {/* <SettingsStack.Screen name="BrowseHitory" component={BrowseHistory}/> */}
     </SettingsStack.Navigator>
   )
 }
