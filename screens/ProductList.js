@@ -21,7 +21,7 @@ export default function ProductList({ route, navigation }) {
   const [user_allergies, setAllergies] = useState([])
 
   useEffect(() => {
-    getAllergies()
+    getAllergies();
   });
 
   function getAllergies() {
@@ -39,6 +39,7 @@ export default function ProductList({ route, navigation }) {
 
       setAllergies(allergies);
     });
+    allergies.off()
   }
 
   function getProductFromAPI(upc, userAllergies, { navigation }) {
