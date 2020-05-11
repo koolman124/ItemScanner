@@ -77,9 +77,17 @@ function getProductFromAPI(upc, userAllergies, { navigation }) {
       console.error(error);
     });
 }
-  return (
-    <SafeAreaView style={{flex: 1}}> 
-      <Loader loading={loading_status} />
+
+function createHistory(){
+  if (aList.length == 0)
+    return(
+      <View>
+        <Text>You have not searched or scanned any item.</Text>
+      </View>
+    )
+  else {
+    return(
+      <View>
         <FlatList
         data = {aList}
           renderItem={({item}) => 
@@ -97,14 +105,19 @@ function getProductFromAPI(upc, userAllergies, { navigation }) {
                    <Text>{item.ProductName}</Text>
                    <Text> {"UPC Number: " + item.UPC}</Text>
                     </TouchableOpacity>
-              
-
-                     
-                     
                   </View>
               }
               keyExtractor={item => item.Key}
             />
+      </View>
+    )
+  }
+}
+
+  return (
+    <SafeAreaView style={{flex: 1}}> 
+      <Loader loading={loading_status} />
+        {createHistory()}
         </SafeAreaView>    
         )  
 };
