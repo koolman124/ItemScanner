@@ -59,11 +59,6 @@ function getProductFromAPI(upc, { navigation }) {
         Alert.alert("Item scanned could not be found. Please try again or scan another item.")
       }
       else {
-        firebase.database().ref("users/"+ firebase.auth().currentUser.uid + "/scanHistory/productList/" + upc).set({
-          ProductName: responseJson['productTitle'],
-          Image: responseJson['productPic'],
-          UPC: upc
-        });
         navigation.navigate("Product", {
             productName: responseJson['productTitle'],
             productImage: responseJson['productPic'],
