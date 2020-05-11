@@ -22,8 +22,9 @@ export default class SignUp extends React.Component {
           this.state.passwordConfirm
       );
       return;
-    }
-    firebase
+    } 
+    else {
+      firebase
       .auth()
       .createUserWithEmailAndPassword(this.state.email, this.state.password)
       .then(
@@ -39,12 +40,23 @@ export default class SignUp extends React.Component {
               firstName: this.state.firstName,
               lastName: this.state.lastName,
             });
+            firebase
+            .database()
+            .ref("users/" + res.user.uid + '/Filters')
+            .set({
+              Peanuts: false,
+              Chocolate: false,
+              Cinnamon: false,
+              Soy: false,
+              Wheat: false,
+              Milk: false
+            });
+            this.props.navigation.navigate("Login");
         },
         error => {
           Alert.alert(error.message);
-        }
-      );
-    this.props.navigation.navigate("Login");
+        });
+    }
   };
 
   render() {
