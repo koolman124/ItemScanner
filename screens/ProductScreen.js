@@ -119,6 +119,16 @@ export default function ProductScreen({ route, navigation }) {
     );
   }
 
+  function displayAllergies(){
+    return user_allergies.map(function(item, i){
+      return(
+        <View key={i}>
+          <Text style={styles.warningText}>{item}</Text>
+        </View>
+      )
+    })
+  }
+
   function createWarning(){
     if (user_allergies === undefined || user_allergies.length === 0) {
       return;
@@ -126,7 +136,7 @@ export default function ProductScreen({ route, navigation }) {
       return (
         <View>
           <Text style={styles.warningText}>May contain an ingredient you are allergic to:</Text>
-          <Text style={styles.warningText}>{user_allergies}</Text>
+          {displayAllergies()}
         </View>
       )
     }
@@ -178,11 +188,11 @@ export default function ProductScreen({ route, navigation }) {
       <ScrollView style={{flex: 1}}>
         <Loader loading={loading_status} />
         <View style={styles.imageContent}>
-        <Image
-          style={{ width: 130, height: 130 }}
-          source={{ uri: product_image }}
-        />
-        <Text style={styles.name}>{product_name}</Text>
+          <Text style={styles.name}>{product_name}</Text>
+          <Image
+            style={{ width: 130, height: 130 }}
+            source={{ uri: product_image }}
+          />
         </View>
         {createWarning()}
         <View style={styles.bodyContent}>
