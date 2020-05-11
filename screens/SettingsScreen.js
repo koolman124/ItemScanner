@@ -25,13 +25,13 @@ class SettingsScreen extends React.Component{
         title="User Allergies"
         description="View/Set your allergies"
         left={props => <List.Icon {...props} icon="medical-bag" />}
-        onPress={() => this.props.navigation.navigate('AllergiesScreen')}
+        onPress={() => this.props.navigation.navigate('Allergies')}
       />
       <List.Item
         title="Item History"
         description="View your item history"
         left={props => <List.Icon {...props} icon="history" />}
-        onPress={() => this.props.navigation.navigate('BrowseHistory')}
+        onPress={() => this.props.navigation.navigate('Browse History')}
       />
        <Button
        title = "Sign Out"

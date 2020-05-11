@@ -48,8 +48,8 @@ function SettingsStackScreen() {
   return (
     <SettingsStack.Navigator>
       <SettingsStack.Screen name="Settings" component={SettingsScreen} />
-      <SettingsStack.Screen name="AllergiesScreen" component={AllergiesScreen} />
-      <SettingsStack.Screen name="BrowseHistory" component={BrowseHistory}/> 
+      <SettingsStack.Screen name="Allergies" component={AllergiesScreen} />
+      <SettingsStack.Screen name="Browse History" component={BrowseHistory}/> 
     </SettingsStack.Navigator>
   )
 }

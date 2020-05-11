@@ -31,10 +31,7 @@ useEffect(() => {
   } 
 function getData()
 {
-  var listRef  = firebase.database().ref("users/"+ firebase.auth().currentUser.uid + "/scanHistory/productList");
-  
-  listRef.once('value').then(function(snapshot) {
-
+  var listRef  = firebase.database().ref("users/"+ firebase.auth().currentUser.uid + "/scanHistory/productList").once('value').then(function(snapshot) {
     let theList = snapshot.val();
     let listRef = [];
     var theProductList = Object.keys(theList);
