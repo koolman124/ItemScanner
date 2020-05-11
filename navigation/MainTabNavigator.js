@@ -31,7 +31,17 @@ function HomeStackScreen() {
     </HomeStack.Navigator>
   )
 }
+const BrowseHistoryStack = createStackNavigator();
 
+function BrowseHistoryStackScreen()
+{
+  return(
+    <BrowseHistoryStack.Navigator>
+      <BrowseHistoryStack.Screen name="BrowseHistory" component={BrowseHistory}/>
+      <BrowseHistoryStack.Screen name="Product" component={ProductScreen}/>
+    </BrowseHistoryStack.Navigator>
+  )
+}
 const SettingsStack = createStackNavigator();
 
 function SettingsStackScreen() {
@@ -39,7 +49,7 @@ function SettingsStackScreen() {
     <SettingsStack.Navigator>
       <SettingsStack.Screen name="Settings" component={SettingsScreen} />
       <SettingsStack.Screen name="AllergiesScreen" component={AllergiesScreen} />
-      {/* <SettingsStack.Screen name="BrowseHitory" component={BrowseHistory}/> */}
+      <SettingsStack.Screen name="BrowseHistory" component={BrowseHistory}/> 
     </SettingsStack.Navigator>
   )
 }
