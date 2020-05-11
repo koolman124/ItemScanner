@@ -167,21 +167,29 @@ export default function ProductScreen({ route, navigation }) {
   }
 
   function createRelatedItems() {
-    return product_relatedItems.map(function(item, i){
+    if (product_relatedItems === undefined || product_relatedItems.length === 0) {
       return(
-        <View key={i} style={{flex:1, flexDirection: 'row'}}>
-            <Image
-              source={{uri: item.productImage}}
-            style={{width:100, height:100, margin: 5}}
-            />
-            <TouchableOpacity 
-              style={{flex: 1,  flexDirection: 'column', height: 100}}
-              onPress={_ => fetchItemSku(item.store, item.productSku)}>
-                  <Text>{item.productName}</Text>
-            </TouchableOpacity>
+        <View>
+          <Text>No related products found</Text>
         </View>
-      )
-    })
+      );
+    } else {
+      return product_relatedItems.map(function(item, i){
+        return(
+          <View key={i} style={{flex:1, flexDirection: 'row'}}>
+              <Image
+                source={{uri: item.productImage}}
+              style={{width:100, height:100, margin: 5}}
+              />
+              <TouchableOpacity 
+                style={{flex: 1,  flexDirection: 'column', height: 100}}
+                onPress={_ => fetchItemSku(item.store, item.productSku)}>
+                    <Text>{item.productName}</Text>
+              </TouchableOpacity>
+          </View>
+        )
+      })
+    }
   }
 
   return (
