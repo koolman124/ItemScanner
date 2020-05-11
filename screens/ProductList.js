@@ -25,8 +25,7 @@ export default function ProductList({ route, navigation }) {
   });
 
   function getAllergies() {
-    const allergies = firebase.database().ref("users/" + firebase.auth().currentUser.uid + "/Filters");
-    allergies.once('value', function(snapshot) {
+    const allergies = firebase.database().ref("users/" + firebase.auth().currentUser.uid + "/Filters").once('value').then(function(snapshot) {
       let items = snapshot.val();
       let allergies = [];
       var objectKeys = Object.keys(items);
@@ -36,10 +35,8 @@ export default function ProductList({ route, navigation }) {
           allergies.push(allergy);
         }
       }
-
       setAllergies(allergies);
     });
-    allergies.off()
   }
 
   function getProductFromAPI(upc, userAllergies, { navigation }) {
