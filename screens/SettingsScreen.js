@@ -25,7 +25,7 @@ class SettingsScreen extends React.Component{
         title="User Allergies"
         description="View/Set your allergies"
         left={props => <List.Icon {...props} icon="medical-bag" />}
-        onPress={() => this.props.navigation.navigate('MedFilters')}
+        onPress={() => this.props.navigation.navigate('AllergiesScreen')}
       />
       <List.Item
         title="Item History"

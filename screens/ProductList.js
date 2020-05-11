@@ -22,7 +22,7 @@ export default function ProductList({ route, navigation }) {
 
   useEffect(() => {
     getAllergies();
-  });
+  }, []);
 
   function getAllergies() {
     const allergies = firebase.database().ref("users/" + firebase.auth().currentUser.uid + "/Filters").once('value').then(function(snapshot) {
