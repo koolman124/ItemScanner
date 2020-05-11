@@ -12,12 +12,8 @@ const [loading_status, setLoading] = useState(false);
 const [user_allergies, setAllergies] = useState([])
 useEffect(() => {
     getData();
-  },[]);
-
-
-useEffect(() => {
     getAllergies();
-  }),[];
+  },[]);
 
   function getAllergies() {
     const allergies = firebase.database().ref("users/" + firebase.auth().currentUser.uid + "/Filters").once('value').then(function(snapshot) {
