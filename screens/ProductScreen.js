@@ -9,7 +9,7 @@ import {
   View,
   StyleSheet,
   Image,
-  SafeAreaView
+  ScrollView
 } from "react-native";
 
 import Loader from '../components/Loader';
@@ -132,23 +132,10 @@ export default function ProductScreen({ route, navigation }) {
     }
   }
 
-  return (
-      <SafeAreaView style={{flex: 1}}>
-        <Loader loading={loading_status} />
-        <View style={styles.imageContent}>
-        <Image
-          style={{ width: 130, height: 130 }}
-          source={{ uri: product_image }}
-        />
-        <Text style={styles.name}>{product_name}</Text>
-        </View>
-        {createWarning()}
-        <View style={styles.bodyContent}>
-          <Text style={styles.categoryText}>Buy Now</Text>
-          <FlatList
-              data = {product_links}
-              renderItem={({item}) => 
-              <View style={styles.storeComponent}>
+  function createStoreButtons(){
+    return product_links.map(function(item, i){
+      return(
+        <View key={i} style={styles.storeComponent}>
                 <Text style={styles.storeText}>{item.store}:</Text>
                 <View style={styles.buyRow}>
                   <TouchableOpacity 
@@ -164,33 +151,47 @@ export default function ProductScreen({ route, navigation }) {
                     <Text style={styles.textStyle}>Find near me</Text>
                   </TouchableOpacity>
                 </View>
-              </View>
-            }
-            keyExtractor={(item, index) => index.toString()}
-          />
+        </View>
+      );
+    });
+  }
+
+  function createRelatedItems() {
+    return product_relatedItems.map(function(item, i){
+      return(
+        <View key={i} style={{flex:1, flexDirection: 'row'}}>
+            <Image
+              source={{uri: item.productImage}}
+            style={{width:100, height:100, margin: 5}}
+            />
+            <TouchableOpacity 
+              style={{flex: 1,  flexDirection: 'column', height: 100}}
+              onPress={_ => fetchItemSku(item.store, item.productSku)}>
+                  <Text>{item.productName}</Text>
+            </TouchableOpacity>
+        </View>
+      )
+    })
+  }
+
+  return (
+      <ScrollView style={{flex: 1}}>
+        <Loader loading={loading_status} />
+        <View style={styles.imageContent}>
+        <Image
+          style={{ width: 130, height: 130 }}
+          source={{ uri: product_image }}
+        />
+        <Text style={styles.name}>{product_name}</Text>
+        </View>
+        {createWarning()}
+        <View style={styles.bodyContent}>
+          <Text style={styles.categoryText}>Buy Now</Text>
+          {createStoreButtons()}
         </View>
         <Text style={styles.categoryText}>Related Items</Text>
-        <FlatList
-            data = {product_relatedItems}
-            renderItem={({item}) => 
-              <View 
-                style={{flex:1, flexDirection: 'row'}}
-              >
-                <Image
-                  source={{uri: item.productImage}}
-                  style={{width:100, height:100, margin: 5}}
-                />
-                <TouchableOpacity 
-                  style={{flex: 1,  flexDirection: 'column', height: 100}}
-                  onPress={_ => fetchItemSku(item.store, item.productSku)}
-                >
-                  <Text>{item.productName}</Text>
-                </TouchableOpacity>
-              </View>
-          }
-          keyExtractor={item => item.productSku}
-        />
-    </SafeAreaView>
+        {createRelatedItems()}
+    </ScrollView>
   );
 }
 
