@@ -32,18 +32,20 @@ useEffect(() => {
 function getData()
 {
   var listRef  = firebase.database().ref("users/"+ firebase.auth().currentUser.uid + "/scanHistory/productList").once('value').then(function(snapshot) {
-    let theList = snapshot.val();
-    let listRef = [];
-    var theProductList = Object.keys(theList);
-      for (var i = 0; i < theProductList.length;i++)
-      {
-        var theKey = theProductList[i] ; 
-        listRef.push({"Key":theKey,"Image" : theList[theKey].Image,
-        "UPC": theKey, 
-        "ProductName": theList[theKey].ProductName});
-      }
-    console.log(listRef);
-    setList(listRef);
+    if (snapshot.exists()) {
+      let theList = snapshot.val();
+      let listRef = [];
+      var theProductList = Object.keys(theList);
+        for (var i = 0; i < theProductList.length;i++)
+        {
+          var theKey = theProductList[i] ; 
+          listRef.push({"Key":theKey,"Image" : theList[theKey].Image,
+          "UPC": theKey, 
+          "ProductName": theList[theKey].ProductName});
+        }
+      console.log(listRef);
+      setList(listRef);
+      }  
     });
 }
 function getProductFromAPI(upc, userAllergies, { navigation }) {
