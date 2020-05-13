@@ -134,7 +134,7 @@ export default function ProductScreen({ route, navigation }) {
       return;
     } else {
       return (
-        <View>
+        <View style={styles.card}>
           <Text style={styles.warningText}>May contain an ingredient you are allergic to:</Text>
           {displayAllergies()}
         </View>
@@ -176,35 +176,39 @@ export default function ProductScreen({ route, navigation }) {
     } else {
       return product_relatedItems.map(function(item, i){
         return(
-          <View key={i} style={{flex:1, flexDirection: 'row'}}>
-              <Image
-                source={{uri: item.productImage}}
-              style={{width:100, height:100, margin: 5}}
-              />
-              <TouchableOpacity 
-                style={{flex: 1,  flexDirection: 'column', height: 100}}
-                onPress={_ => fetchItemSku(item.store, item.productSku)}>
+          <TouchableOpacity 
+              key={i}
+              style={styles.relatedCards}
+                onPress={_ => fetchItemSku(item.store, item.productSku)}
+                >
+                  <Image
+                    source={{uri: item.productImage}}
+                    style={{width:100, height:100, margin: 5}}
+                  />
+                  <View 
+                    style={{flex: 1,  flexDirection: 'column', height: 100}}
+                  >
                     <Text>{item.productName}</Text>
-              </TouchableOpacity>
-          </View>
+                  </View>
+                </TouchableOpacity>
         )
       })
     }
   }
 
   return (
-      <ScrollView style={{flex: 1}}>
+      <ScrollView style={{flex: 1, backgroundColor: '#fff'}}>
         <Loader loading={loading_status} />
-        <View style={styles.imageContent}>
+        <View style={styles.card}>
+            <Image
+              style={{ width: 250, height: 250 }}
+              source={{ uri: product_image }}
+            />
           <Text style={styles.name}>{product_name}</Text>
-          <Image
-            style={{ width: 130, height: 130 }}
-            source={{ uri: product_image }}
-          />
         </View>
         {createWarning()}
+        <Text style={styles.categoryText}>Buy Now</Text>
         <View style={styles.bodyContent}>
-          <Text style={styles.categoryText}>Buy Now</Text>
           {createStoreButtons()}
         </View>
         <Text style={styles.categoryText}>Related Items</Text>
@@ -218,15 +222,45 @@ function handleBuyNowPress(url) {
 }
 
 const styles = StyleSheet.create({
-  imageContent: {
+  card: {
     alignItems: "center",
-    padding: 5
+    padding: 10,
+    borderRadius: 6,  
+    backgroundColor: '#fff', 
+    margin: 4,
+    width: '98%',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 2
+  },
+  relatedCards:{
+    flex: 1,  
+    flexDirection: 'row',
+    padding: 5,
+    borderRadius: 6,  
+    backgroundColor: '#fff', 
+    margin: 4,
+    width: '98%',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 2
   },
   name: {
-    fontSize: 28,
+    fontSize: 25,
     color: "#696969",
     fontWeight: "600",
-    padding: 10
+    padding: 5,
+    textAlign: "center"
   },
   lineStyle:{
     borderWidth: 0.5,
@@ -253,8 +287,9 @@ const styles = StyleSheet.create({
   },
   categoryText: {
     textTransform: "uppercase",
-    textAlign: "center",
-    margin: 2
+    fontWeight: 'bold',
+    marginLeft: 20,
+    marginTop: 10
   },
   buttonShape: {
     marginTop:5,
