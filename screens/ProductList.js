@@ -10,6 +10,7 @@ import {
   SafeAreaView
 } from "react-native";
 import * as firebase from "firebase";
+import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
 
 import Loader from '../components/Loader';
 
@@ -70,25 +71,25 @@ export default function ProductList({ route, navigation }) {
   }
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
       <Loader loading={loading_status} />   
       <FlatList
             data = {product_links}
             renderItem={({item}) => 
-              <View 
-                style={{flex:1, flexDirection: 'row'}}
-              >
-                <Image
-                  source={{uri: item.productImage}}
-                  style={{width:100, height:100, margin: 5}}
-                />
-                <TouchableOpacity 
-                  style={{flex: 1,  flexDirection: 'column', height: 100}}
+              <TouchableOpacity 
+                  style={styles.card}
                   onPress={_ => getProductFromAPI(item.productUpc, user_allergies, { navigation })}
                 >
-                  <Text>{item.productName}</Text>
+                  <Image
+                    source={{uri: item.productImage}}
+                    style={{width:100, height:100, margin: 5}}
+                  />
+                  <View 
+                    style={{flex: 1,  flexDirection: 'column', height: 100}}
+                  >
+                    <Text>{item.productName}</Text>
+                  </View>
                 </TouchableOpacity>
-              </View>
           }
           keyExtractor={item => item.productUpc}
         />
@@ -104,6 +105,22 @@ const styles = StyleSheet.create({
   imageContent: {
     alignItems: "center",
     padding: 5
+  },
+  card:{
+    flex: 1,  
+    flexDirection: 'row', 
+    borderRadius: 6,  
+    backgroundColor: '#fff', 
+    margin: 2,
+    width: '98%',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 2
   },
   name: {
     fontSize: 28,
