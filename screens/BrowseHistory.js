@@ -3,8 +3,6 @@ import firebase from 'firebase';
 import React, { useState,useEffect} from 'react';
 import Loader from '../components/Loader';
 
-
-
 export default function BrowseHistory ({navigation}){  
 const [aList,setList] = useState([]);
 const [loading_status, setLoading] = useState(false);
@@ -28,6 +26,7 @@ useEffect(() => {
       setAllergies(allergies);
     });
   } 
+  
 function getData()
 {
   var listRef  = firebase.database().ref("users/"+ firebase.auth().currentUser.uid + "/scanHistory/productList").once('value').then(function(snapshot) {
