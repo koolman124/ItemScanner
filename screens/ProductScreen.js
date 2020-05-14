@@ -98,6 +98,11 @@ export default function ProductScreen({ route, navigation }) {
             var str = url.split("/")
             sku = str[str.length-1]
           }
+          if (url.includes("barnesandnoble")){
+            var str = url.split("=")
+            sku = str[str.length-1]
+          }
+          console.log(sku)
           return fetch("https://item-finder-app.herokuapp.com/api/v1/productinfo/nearby?store=".concat(store).concat("&sku=").concat(sku).concat("&postal_code=").concat(addressComponent[addressComponent.length - 1].short_name), {
             method: "GET",
             headers: {
@@ -230,6 +235,7 @@ export default function ProductScreen({ route, navigation }) {
 }
 
 function handleBuyNowPress(url) {
+  console.log(url);
   WebBrowser.openBrowserAsync(url);
 }
 
