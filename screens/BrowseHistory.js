@@ -88,26 +88,26 @@ function createHistory(){
   else {
     return(
       <View>
-        <FlatList
-        data = {aList}
-          renderItem={({item}) => 
-                  <View 
-                    style={{flex:1, flexDirection: 'row'}}
-                  >
-                  <Image
-                      source={{uri: item.Image}}
-                      style={{width:100, height:100, margin: 5}}
-                    />  
-                     <TouchableOpacity 
-                  style={{flex: 1,  flexDirection: 'column', height: 100}}
-                  onPress={_ => getProductFromAPI(item.UPC, user_allergies, { navigation })}
-                > 
-                   <Text>{item.ProductName}</Text>
-                   <Text> {"UPC Number: " + item.UPC}</Text>
+            <FlatList
+                data = {aList}
+                renderItem={({item}) => 
+                  <TouchableOpacity 
+                      style={styles.card}
+                      onPress={_ => getProductFromAPI(item.UPC, user_allergies, { navigation })}
+                    >
+                      <Image
+                        source={{uri: item.Image}}
+                        style={{width:100, height:100, margin: 5}}
+                      />
+                      <View 
+                        style={{flex: 1,  flexDirection: 'column', height: 100}}
+                      >
+                        <Text>{item.ProductName}</Text>
+                        <Text> {"UPC Number: " + item.UPC}</Text>
+                      </View>
                     </TouchableOpacity>
-                  </View>
               }
-              keyExtractor={item => item.Key}
+              keyExtractor={item => item.productUpc}
             />
       </View>
     )
@@ -123,53 +123,22 @@ function createHistory(){
 };
    
 const styles = StyleSheet.create({
-    imageContent: {
-      alignItems: "center",
-      padding: 5
+  card:{
+    flex: 1,  
+    flexDirection: 'row', 
+    borderRadius: 6,  
+    backgroundColor: '#fff', 
+    margin: 2,
+    width: '98%',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
     },
-    name: {
-      fontSize: 28,
-      color: "#696969",
-      fontWeight: "600",
-      padding: 10
-    },
-    lineStyle:{
-      borderWidth: 0.5,
-      borderColor:"black",
-      margin:5,
-    },
-    buyNowText: {
-        padding: 9,
-        fontSize: 20,
-        color: '#2e78b7',
-      },
-      buyRow: {
-        flexDirection: "row"
-      },
-      categoryText: {
-        textTransform: "uppercase",
-        textAlign: "center"
-      },
-      buttonShape: {
-        marginTop:10,
-        paddingTop:15,
-        paddingBottom:15,
-        marginLeft:30,
-        marginRight:30,
-        backgroundColor:'#00bfff',
-        borderRadius:10,
-        borderWidth: 1,
-        borderColor: '#fff',
-        width:250,
-        height: 45
-      },
-      textStyle: {
-        color: "#ffffff",
-        textAlign: "center"
-      },
-      bodyContent: {
-        alignItems: "center",
-        padding: 20
-      }
-    });        
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 2
+  }
+});
+     
 
