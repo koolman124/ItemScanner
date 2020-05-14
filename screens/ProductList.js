@@ -10,7 +10,7 @@ import {
   SafeAreaView
 } from "react-native";
 import * as firebase from "firebase";
-import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
+import { useFocusEffect } from '@react-navigation/native';
 
 import Loader from '../components/Loader';
 
@@ -21,7 +21,7 @@ export default function ProductList({ route, navigation }) {
   const [loading_status, setLoading] = useState(false);
   const [user_allergies, setAllergies] = useState([])
 
-  useEffect(() => {
+  useFocusEffect(() => {
     getAllergies();
   }, []);
 
