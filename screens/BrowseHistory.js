@@ -115,7 +115,7 @@ function createHistory(){
 }
 
   return (
-    <SafeAreaView style={{flex: 1}}> 
+    <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}> 
       <Loader loading={loading_status} />
         {createHistory()}
         </SafeAreaView>    
