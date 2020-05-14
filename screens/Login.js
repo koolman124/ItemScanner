@@ -37,7 +37,9 @@ export default class Login extends React.Component {
           onChangeText={password => this.setState({ password })}
           value={this.state.password}
         />
-        <Button title="Login" onPress={this.handleLogin} />
+        <View style={styles.buttonStyle}>
+          <Button style={styles.buttonStyle} title="Login" onPress={this.handleLogin} /> 
+        </View>
         <Button
           title="Don't have an account? Sign Up"
           onPress={() => this.props.navigation.navigate('SignUp')}
@@ -58,6 +60,10 @@ const styles = StyleSheet.create({
     width: '90%',
     borderColor: 'gray',
     borderWidth: 1,
+    borderRadius: 6, 
     marginTop: 8
+  },
+  buttonStyle: {
+    padding: 10
   }
 })

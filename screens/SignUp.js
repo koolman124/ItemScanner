@@ -104,7 +104,9 @@ export default class SignUp extends React.Component {
           onChangeText={passwordConfirm => this.setState({ passwordConfirm })}
           value={this.state.passwordConfirm}
         />
-        <Button title="Sign Up" onPress={this.onSignupPress} />
+        <View style={styles.buttonStyle}>
+          <Button title="Sign Up" onPress={this.onSignupPress} />
+        </View>
         <Button
           title="Already have an account? Login"
           onPress={() => this.props.navigation.navigate('Login')}
@@ -125,6 +127,10 @@ const styles = StyleSheet.create({
     width: '90%',
     borderColor: 'gray',
     borderWidth: 1,
-    marginTop: 8
+    marginTop: 8,
+    borderRadius: 6
+  },
+  buttonStyle: {
+    padding: 10
   }
 })
