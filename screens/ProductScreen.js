@@ -11,6 +11,7 @@ import {
   Image,
   ScrollView
 } from "react-native";
+import { useFocusEffect } from '@react-navigation/native';
 
 import Loader from '../components/Loader';
 
@@ -32,11 +33,22 @@ export default function ProductScreen({ route, navigation }) {
   const [postal_code, setPostal] = useState("");
   const [loading_status, setLoading] = useState(false);
 
-  firebase.database().ref("users/"+ firebase.auth().currentUser.uid + "/scanHistory/productList/" + productUPC).set({
-    ProductName: productName,
-    Image: productImage,
-    UPC: productUPC
-  });
+  useFocusEffect(() => {
+    addtoFB();
+  }, []);
+
+  function addtoFB() {
+    try {
+      firebase.database().ref("users/"+ firebase.auth().currentUser.uid + "/scanHistory/productList/" + productUPC).set({
+        ProductName: productName,
+        Image: productImage,
+        UPC: productUPC
+      });
+    }
+    catch(err) {
+      console.log(err)
+    }
+  }
 
   function fetchItemSku(store, sku) {
     setLoading(true);

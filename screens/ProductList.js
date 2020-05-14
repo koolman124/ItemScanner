@@ -91,7 +91,7 @@ export default function ProductList({ route, navigation }) {
                   </View>
                 </TouchableOpacity>
           }
-          keyExtractor={item => item.productUpc}
+          keyExtractor={item => item.productName}
         />
     </SafeAreaView>    
   );

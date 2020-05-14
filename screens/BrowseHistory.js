@@ -1,7 +1,6 @@
-import {StyleSheet, Text, View, Image, TouchableOpacity,SafeAreaView,FlatList,CheckBox,Button} from "react-native";
+import {StyleSheet, Text, View, Image, TouchableOpacity,SafeAreaView,FlatList, Alert} from "react-native";
 import firebase from 'firebase';
 import React, { useState,useEffect} from 'react';
-import { List } from 'react-native-paper';
 import Loader from '../components/Loader';
 
 
@@ -61,16 +60,21 @@ function getProductFromAPI(upc, userAllergies, { navigation }) {
     .then(response => response.json())
     .then(responseJson => {
       setLoading(false);
-      // console.log(responseJson);
-      // console.log(responseJson['allergies'])
-      navigation.navigate("Product", {
-            productName: responseJson['productTitle'],
-            productImage: responseJson['productPic'],
-            productLinks: responseJson['productLinks'],
-            productRelatedItems: responseJson['relatedItems'],
-            userAllergies: responseJson['allergies'],
-            productUPC : upc
-      });
+      if(responseJson.hasOwnProperty('Error')){
+        Alert.alert("Item could not be found. Please try again or try another item.");
+      }
+      else {
+        // console.log(responseJson);
+        // console.log(responseJson['allergies'])
+        navigation.navigate("Product", {
+              productName: responseJson['productTitle'],
+              productImage: responseJson['productPic'],
+              productLinks: responseJson['productLinks'],
+              productRelatedItems: responseJson['relatedItems'],
+              userAllergies: responseJson['allergies'],
+              productUPC : upc
+        });
+      }
     })
     .catch(error => {
       console.log("Error finding");
@@ -107,7 +111,7 @@ function createHistory(){
                       </View>
                     </TouchableOpacity>
               }
-              keyExtractor={item => item.productUpc}
+              keyExtractor={item => item.UPC}
             />
       </View>
     )
